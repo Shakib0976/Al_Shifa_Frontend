@@ -41,7 +41,7 @@ export const heroSlides = [
     },
     secondaryCta: { label: "Learn More", href: "/shop" },
     image: {
-      src: "https://i.ibb.co.com/FLPh6KhJ/1600w-Tks-Vvdlhi-B0.jpg",
+      src: "https://i.ibb.co.com/0yVLhjnR/e6d72cfd6073387b12e2c7c640330993.jpg",
       alt: "Cattle feed banner",
     },
     fallbackTint: "22, 101, 52", // green-ish (used before auto-extraction runs)
@@ -73,7 +73,7 @@ export const heroSlides = [
     primaryCta: { label: "Explore Fish Feed", href: "/categories/fish-feed" },
     secondaryCta: { label: "Learn More", href: "/shop" },
     image: {
-      src: "https://i.ibb.co.com/wrR3bSZp/1600w-HQt-P73-Sne0-I.jpg",
+      src: "https://i.ibb.co.com/5WzrLmtD/Screenshot-2026-10-30-180259.png",
       alt: "Fish feed banner",
     },
     fallbackTint: "249, 115, 22",

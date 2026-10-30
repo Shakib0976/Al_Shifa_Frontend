@@ -81,6 +81,8 @@ export default function HeroSlider() {
   const [failedImages, setFailedImages] = useState({});
 
   const rootRef = useRef(null);
+  const railRef = useRef(null);
+  const pointerStartRef = useRef(null);
   const tweenRef = useRef(null);
   const prevIndexRef = useRef(0);
   const attemptedTintRef = useRef(new Set());
@@ -233,6 +235,18 @@ export default function HeroSlider() {
     };
   }, [index]);
 
+  // ---- Small screens: keep the active thumbnail centered in the rail (scrolls the rail only, never the page)
+  useEffect(() => {
+    const rail = railRef.current;
+    if (!rail || rail.clientWidth === 0 || rail.scrollWidth <= rail.clientWidth) return;
+    const el = rail.querySelectorAll("[data-rail-item]")[index];
+    if (!el) return;
+    rail.scrollTo({
+      left: el.offsetLeft - (rail.clientWidth - el.offsetWidth) / 2,
+      behavior: prefersReducedMotion() ? "auto" : "smooth",
+    });
+  }, [index]);
+
   // ---- Navigation
   const goTo = useCallback((i) => setIndex(i), []);
   const prev = useCallback(() => setIndex((i) => (i - 1 + total) % total), [total]);
@@ -273,13 +287,28 @@ export default function HeroSlider() {
     if (e.key === "ArrowLeft") prev();
     else if (e.key === "ArrowRight") next();
   };
+  const handleSlidePointerDown = (e) => {
+    if (!e.isPrimary || e.pointerType === "mouse") return;
+    pointerStartRef.current = { x: e.clientX, y: e.clientY };
+  };
+  const handleSlidePointerUp = (e) => {
+    const start = pointerStartRef.current;
+    pointerStartRef.current = null;
+    if (!start) return;
+
+    const deltaX = e.clientX - start.x;
+    const deltaY = e.clientY - start.y;
+    if (Math.abs(deltaX) < 48 || Math.abs(deltaX) <= Math.abs(deltaY)) return;
+    if (deltaX < 0) next();
+    else prev();
+  };
 
   return (
     <section
       ref={rootRef}
       aria-roledescription="carousel"
       aria-label="Featured banner"
-      className="w-full bg-background px-3 py-3 sm:px-4 sm:py-4 md:px-6 md:py-6"
+      className="w-full bg-background px-2 py-3  sm:py-4 md:px-6 md:py-6"
       onPointerEnter={handlePointerEnter}
       onPointerLeave={handlePointerLeave}
       onPointerDown={handlePointerDown}
@@ -287,136 +316,187 @@ export default function HeroSlider() {
       onBlur={handleBlur}
       onKeyDown={handleKeyDown}
     >
-      <div className="relative mx-auto w-full lg:max-w-11/12 overflow-hidden rounded-lg border border-border bg-black shadow-lg lg:rounded-lg">
-        {/* Small screens: blurred copy of the current photo behind everything, so the card is true glass */}
-        {!failedImages[slide.id] && (
+      <div className="mx-auto w-full max-w-11/12">
+        {/* Hero frame: banner only on small screens; banner + glass card on lg+ */}
+        <div className="relative overflow-hidden rounded-2xl border border-border bg-black shadow-lg lg:rounded-3xl">
           <div
-            aria-hidden="true"
-            className="pointer-events-none absolute inset-0 overflow-hidden lg:hidden"
+            className="relative aspect-[16/9] w-full touch-pan-y xl:aspect-[21/9]"
+            onPointerDown={handleSlidePointerDown}
+            onPointerUp={handleSlidePointerUp}
+            onPointerCancel={() => {
+              pointerStartRef.current = null;
+            }}
           >
-            <Image
-              key={slide.id}
-              src={slide.image.src}
-              alt=""
-              fill
-              sizes="(min-width: 1400px) 1400px, 100vw"
-              className="scale-125 object-cover opacity-70 blur-2xl"
-            />
-            <div className="absolute inset-0 bg-black/30" />
-          </div>
-        )}
-
-        {/* Photo stage */}
-        <div className="relative aspect-[5/4] w-full sm:aspect-[16/10] lg:aspect-[16/9] xl:aspect-[21/9]">
-          {heroSlides.map((s, i) => (
-            <div
-              key={s.id}
-              data-slide-image
-              aria-hidden={i !== index}
-              className={cn("absolute inset-0", i !== index && "opacity-0")}
-            >
-              {failedImages[s.id] ? (
-                <div className="flex h-full w-full items-center justify-center bg-primary">
-                  <PawPrint
-                    className="h-16 w-16 text-white/30"
-                    aria-hidden="true"
+            {heroSlides.map((s, i) => (
+              <div
+                key={s.id}
+                data-slide-image
+                aria-hidden={i !== index}
+                className={cn("absolute inset-0", i !== index && "opacity-0")}
+              >
+                {failedImages[s.id] ? (
+                  <div className="flex h-full w-full items-center justify-center bg-primary">
+                    <PawPrint
+                      className="h-16 w-16 text-white/30"
+                      aria-hidden="true"
+                    />
+                  </div>
+                ) : (
+                  <Image
+                    src={s.image.src}
+                    alt={i === index ? s.image.alt : ""}
+                    fill
+                    priority={i === 0}
+                    sizes="(min-width: 1400px) 1400px, 100vw"
+                    className="object-cover"
+                    style={{ objectPosition: s.image.position ?? "center" }}
+                    onError={() =>
+                      setFailedImages((prev) => ({ ...prev, [s.id]: true }))
+                    }
                   />
-                </div>
-              ) : (
-                <Image
-                  src={s.image.src}
-                  alt={i === index ? s.image.alt : ""}
-                  fill
-                  priority={i === 0}
-                  sizes="(min-width: 1400px) 1400px, 100vw"
-                  className="object-cover"
-                  style={{ objectPosition: s.image.position ?? "center" }}
-                  onError={() =>
-                    setFailedImages((prev) => ({ ...prev, [s.id]: true }))
-                  }
-                />
-              )}
-            </div>
-          ))}
+                )}
+              </div>
+            ))}
 
-          {/* Overlay: soft top + bottom fade on small screens, left fade on desktop */}
-          <div
-            aria-hidden="true"
-            className="pointer-events-none absolute inset-0 z-10 bg-gradient-to-b from-black/50 via-transparent to-black/35 lg:bg-gradient-to-r lg:from-black/50 lg:via-black/10 lg:to-transparent"
-          />
-
-          {/* Brand pill, top-left */}
-          <div className="absolute left-3 top-3 z-20 flex max-w-[calc(100%-1.5rem)] items-center gap-2 rounded-full border border-white/20 bg-black/25 py-1.5 pl-2.5 pr-3.5 text-white backdrop-blur-md sm:left-5 sm:top-5 lg:left-6 lg:top-6">
-            <PawPrint className="h-4 w-4 shrink-0" aria-hidden="true" />
-            <span className="truncate text-xs font-semibold sm:text-sm">
-              {slide.brandMessage}
-            </span>
-          </div>
-
-          {/* Desktop indicators, top-right (on small screens they live in the card) */}
-          <Indicators
-            index={index}
-            onSelect={goTo}
-            className="absolute right-6 top-6 z-20 hidden lg:flex"
-          />
-
-          {/* Desktop arrows, bottom-right of the photo */}
-          <div className="absolute bottom-6 right-6 z-30 hidden flex-col gap-2 lg:flex">
-            <NavButton direction="prev" onClick={prev} />
-            <NavButton direction="next" onClick={next} />
-          </div>
-        </div>
-
-        {/* Glass card: overlaps the photo's bottom edge on small screens, overlaid bottom-left on desktop.
-            All slides share one grid cell so its height never jumps between slides. */}
-        <div
-          className="relative z-10 -mt-12 mb-3 ml-3 mr-3 grid rounded-2xl border border-white/25 bg-black/25 p-4 shadow-2xl backdrop-blur-xl sm:-mt-16 sm:mb-5 sm:ml-5 sm:mr-5 sm:p-6 lg:absolute lg:bottom-6 lg:left-6 lg:m-0 lg:w-[calc(100%-7rem)] lg:max-w-[600px] lg:bg-black/20 lg:p-8 lg:backdrop-blur-md xl:max-w-[640px]"
-          style={{ "--tint": tint }}
-        >
-          {heroSlides.map((s, i) => (
+            {/* Everything below is desktop-only: small screens show the clean banner image */}
             <div
-              key={s.id}
-              role="group"
-              aria-roledescription="slide"
-              aria-label={`${i + 1} of ${total}`}
-              aria-hidden={i !== index}
-              data-active={i === index}
-              className={cn(
-                "col-start-1 row-start-1 flex flex-col items-start",
-                i !== index && "invisible",
-              )}
-            >
-              <span
-                data-anim
-                className="inline-block rounded-full bg-white/15 px-3 py-1 text-xs font-medium text-white"
-              >
-                {s.badge}
+              aria-hidden="true"
+              className="pointer-events-none absolute inset-0 z-10 hidden bg-gradient-to-r from-black/50 via-black/10 to-transparent lg:block"
+            />
+
+            <div className="absolute left-6 top-6 z-20 hidden max-w-[calc(100%-3rem)] items-center gap-2 rounded-full border border-white/20 bg-black/25 py-1.5 pl-2.5 pr-3.5 text-white backdrop-blur-md lg:flex">
+              <PawPrint className="h-4 w-4 shrink-0" aria-hidden="true" />
+              <span className="truncate text-sm font-semibold">
+                {slide.brandMessage}
               </span>
-
-              <h2
-                data-anim
-                className="mt-3 text-2xl font-bold leading-[1.15] text-white sm:text-3xl lg:text-4xl xl:text-5xl"
-              >
-                {s.heading}
-              </h2>
-
-              <p
-                data-anim
-                className="mt-2.5 line-clamp-3 max-w-lg text-sm leading-relaxed text-white/85 sm:line-clamp-none sm:text-base"
-              >
-                {s.description}
-              </p>
             </div>
-          ))}
 
-          {/* Small screens: arrows bottom-left, indicators bottom-right */}
-          <div className="col-start-1 row-start-2 mt-5 flex items-center justify-between gap-3 border-t border-white/15 pt-4 lg:hidden">
-            <div className="flex items-center gap-2">
+            <Indicators
+              index={index}
+              onSelect={goTo}
+              className="absolute right-6 top-6 z-20 hidden lg:flex"
+            />
+
+            <div className="absolute bottom-6 right-6 z-30 hidden flex-col gap-2 lg:flex">
               <NavButton direction="prev" onClick={prev} />
               <NavButton direction="next" onClick={next} />
             </div>
-            <Indicators index={index} onSelect={goTo} className="flex" />
+
+            <div className="absolute left-2 top-1/2 z-30 -translate-y-1/2 lg:hidden">
+              <NavButton direction="prev" onClick={prev} />
+            </div>
+            <div className="absolute right-2 top-1/2 z-30 -translate-y-1/2 lg:hidden">
+              <NavButton direction="next" onClick={next} />
+            </div>
           </div>
+
+          {/* Desktop glass card (hidden on small screens). All slides share one grid cell so height never jumps. */}
+          <div
+            className="absolute bottom-6 left-6 z-10 hidden w-[calc(100%-7rem)] max-w-[600px] rounded-2xl border border-white/25 bg-black/20 p-8 shadow-2xl backdrop-blur-md lg:grid xl:max-w-[640px]"
+            style={{ "--tint": tint }}
+          >
+            {heroSlides.map((s, i) => (
+              <div
+                key={s.id}
+                role="group"
+                aria-roledescription="slide"
+                aria-label={`${i + 1} of ${total}`}
+                aria-hidden={i !== index}
+                data-active={i === index}
+                className={cn(
+                  "col-start-1 row-start-1 flex flex-col items-start",
+                  i !== index && "invisible",
+                )}
+              >
+                <span
+                  data-anim
+                  className="inline-block rounded-full bg-white/15 px-3 py-1 text-xs font-medium text-white"
+                >
+                  {s.badge}
+                </span>
+
+                <h2
+                  data-anim
+                  className="mt-3 text-4xl font-bold leading-tight text-white xl:text-5xl"
+                >
+                  {s.heading}
+                </h2>
+
+                <p
+                  data-anim
+                  className="mt-3 max-w-lg text-base leading-relaxed text-white/85"
+                >
+                  {s.description}
+                </p>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* Small screens: every slide as a named thumbnail under the banner. Auto-slides with the banner. */}
+        <div
+          ref={railRef}
+          role="group"
+          aria-label="Choose slide"
+          className="relative  mt-3 flex snap-x snap-mandatory gap-3 overflow-x-auto scroll-smooth px-3 pb-1 [scrollbar-width:none] sm:-mx-4 sm:px-4 lg:hidden [&::-webkit-scrollbar]:hidden"
+        >
+          {heroSlides.map((s, i) => {
+            const active = i === index;
+            return (
+              <button
+                key={s.id}
+                type="button"
+                data-rail-item
+                aria-label={`Show ${s.label ?? s.badge}`}
+                aria-current={active ? "true" : undefined}
+                onClick={() => goTo(i)}
+                className="w-[38%] shrink-0 touch-manipulation snap-start rounded-lg text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 sm:w-[24%]"
+              >
+                <span
+                  className={cn(
+                    "relative block aspect-[4/3] overflow-hidden rounded-lg border-2 bg-[#E8F5E9] transition-colors duration-300",
+                    active ? "border-primary" : "border-[#E8F5E9]",
+                  )}
+                >
+                  {failedImages[s.id] ? (
+                    <span className="flex h-full w-full items-center justify-center">
+                      <PawPrint
+                        className="h-8 w-8 text-primary/40"
+                        aria-hidden="true"
+                      />
+                    </span>
+                  ) : (
+                    <Image
+                      src={s.image.src}
+                      alt=""
+                      fill
+                      sizes="(min-width: 640px) 24vw, 38vw"
+                      className="object-cover"
+                      style={{ objectPosition: s.image.position ?? "center" }}
+                    />
+                  )}
+                  {active && (
+                    <span
+                      data-progress
+                      aria-hidden="true"
+                      className="absolute inset-x-0 bottom-0 h-1 origin-left bg-white/90"
+                      style={{ transform: "scaleX(0)" }}
+                    />
+                  )}
+                </span>
+                <span
+                  className={cn(
+                    "mt-2 block truncate rounded-md px-2 py-2 text-center text-xs font-semibold uppercase tracking-wide transition-colors duration-300",
+                    active
+                      ? "bg-primary text-white"
+                      : "bg-[#E8F5E9] text-primary",
+                  )}
+                >
+                  {s.label ?? s.badge}
+                </span>
+              </button>
+            );
+          })}
         </div>
       </div>
     </section>
