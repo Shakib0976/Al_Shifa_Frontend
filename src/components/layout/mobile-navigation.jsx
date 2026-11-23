@@ -12,7 +12,8 @@ import {
   SheetTrigger,
 } from "@/components/ui/sheet";
 import { Button } from "@/components/ui/button";
-import { categories, navLinks, siteConfig } from "@/data/navigation";
+import { navLinks, siteConfig } from "@/data/navigation";
+import { categories } from "@/data/products";
 import { cn } from "@/lib/utils";
 
 export default function MobileNavigation() {
@@ -82,15 +83,17 @@ export default function MobileNavigation() {
           </button>
           {catsOpen && (
             <ul id="mobile-categories" className="ml-3 flex flex-col gap-1 border-l border-border pl-3">
-              {categories.map(({ label, slug, icon: Icon }) => (
+              {categories.map(({ name, slug, icon }) => (
                 <li key={slug}>
                   <Link
-                    href={`/categories/${slug}`}
+                    href={`/shop?category=${slug}`}
                     onClick={close}
                     className="flex items-center gap-2 rounded-md px-2 py-2 text-sm text-foreground hover:bg-secondary hover:text-primary"
                   >
-                    <Icon className="h-4 w-4 text-primary" />
-                    {label}
+                    <span aria-hidden="true" className="text-base">
+                      {icon}
+                    </span>
+                    {name}
                   </Link>
                 </li>
               ))}

@@ -4,7 +4,12 @@ import { useEffect, useLayoutEffect, useRef } from "react";
 import Link from "next/link";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { ArrowRight, FlaskConical, ShieldCheck, Sprout, Truck } from "lucide-react";
+import {
+  Beef,
+  Bird,
+  PawPrint,
+  Fish,
+} from "lucide-react";
 import { cn } from "@/lib/utils";
 
 /* ------------------------------------------------------------------ */
@@ -14,31 +19,32 @@ const mission = {
   brand: "Al-Shifa Food Science",
   title: { top: "Our", accent: "Mission" },
   statement: {
-    before: "To bring safe, nutritious food to every family through ",
-    highlight: "science, honest quality and care for farmers",
-    after: ".",
+    before: "Our mission is to improve the ",
+    highlight: "health and performance of animals",
+    after:
+      " (Dairy, Poultry, Pet & Aqua) by providing best quality products and technical support to our valuable customers for future well-being.",
   },
   cta: { label: "Learn About Our Standards", href: "/about" },
   steps: [
     {
-      icon: Sprout,
-      title: "Responsible Sourcing",
-      text: "We partner with trusted farmers and suppliers.",
+      icon: Beef,
+      title: "Dairy",
+      text: "Better health and milk performance for dairy animals.",
     },
     {
-      icon: FlaskConical,
-      title: "Science-Led Testing",
-      text: "Every batch is tested for quality and purity.",
+      icon: Bird,
+      title: "Poultry",
+      text: "Quality products for healthy, high-performing flocks.",
     },
     {
-      icon: ShieldCheck,
-      title: "Safe Processing",
-      text: "Strict hygiene standards at every stage.",
+      icon: PawPrint,
+      title: "Pet",
+      text: "Trusted care and nutrition for companion animals.",
     },
     {
-      icon: Truck,
-      title: "Trusted Delivery",
-      text: "Fresh, traceable food that reaches you safely.",
+      icon: Fish,
+      title: "Aqua",
+      text: "Support for healthy, productive aquaculture.",
     },
   ],
 };

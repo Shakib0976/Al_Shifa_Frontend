@@ -1,5 +1,6 @@
 import Navbar from "@/components/layout/navbar";
 import "./globals.css";
+import Footer from "@/components/layout/footer";
 
 export const metadata = {
   title: "Al-Shifa Animal Science",
@@ -12,6 +13,7 @@ export default function RootLayout({ children }) {
       <body className="min-h-screen bg-background text-foreground antialiased">
         <Navbar />
         <main>{children}</main>
+        <Footer/>
       </body>
     </html>
   );

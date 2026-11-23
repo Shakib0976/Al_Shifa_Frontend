@@ -10,6 +10,8 @@ import AboutSection from "@/components/home/about";
 import MissionSection from "@/components/home/ourMission";
 import ProductSection from "@/components/home/product-section";
 import ConsultancySection from "@/components/home/ConsultancySection";
+import VideoSection from "@/components/home/VideoSection";
+import NewsSection from "@/components/home/NewsSection";
 
 export default function Home() {
   return (
@@ -21,6 +23,8 @@ export default function Home() {
 
       <ProductSection />
       <ConsultancySection />
+      <VideoSection/>
+      <NewsSection/>
     </div>
   );
 }

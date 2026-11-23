@@ -21,6 +21,12 @@ export const siteConfig = {
   },
 };
 
+export const contactDetails = {
+  phone: siteConfig.contact.phone,
+  email: siteConfig.contact.email,
+  address: "Bangladesh",
+};
+
 export const categories = [
   { label: "Cattle Feed", slug: "cattle-feed", icon: Beef },
   { label: "Poultry Feed", slug: "poultry-feed", icon: Bird },
@@ -35,3 +41,5 @@ export const navLinks = [
   // Categories handled separately as a dropdown
   { label: "Contact Us", href: "/contact", icon: Mail },
 ];
+
+export const mainNavigation = navLinks.map(({ label, href }) => ({ label, href }));
