@@ -1,12 +1,28 @@
 import Link from "next/link";
-import { categories } from "@/data/products";
 
 export const metadata = {
   title: "Categories",
   description: "Browse animal products by category.",
 };
 
-export default function CategoriesPage() {
+ 
+export const instant = false;
+
+async function getCategories() {
+  const res = await fetch("http://localhost:3000/api/categories", {
+    cache: "no-store",
+  });
+
+  if (!res.ok) {
+    throw new Error("Failed to fetch categories");
+  }
+
+  return res.json();
+}
+
+export default async function CategoriesPage() {
+  const categories = await getCategories();
+
   return (
     <section className="mx-auto max-w-7xl px-6 py-14 md:px-10">
       <p className="text-sm font-semibold uppercase tracking-wider text-emerald-700">
