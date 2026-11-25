@@ -99,7 +99,7 @@ export const news = [
     content: [
       "Sustainable livestock farming focuses on using available resources responsibly while maintaining animal welfare and farm productivity.",
       "Farmers can improve resource management through proper feed planning, efficient water use, and responsible manure management.",
-      "Small improvements in daily farm practices can contribute to a cleaner environment and more organized agricultural operations.",
+      "Small improvements in daily farm practices can contribute to a cleaner environment and more organized agricultural operations. ",
     ],
   },
 ];
