@@ -41,7 +41,7 @@ export const heroSlides = [
     },
     secondaryCta: { label: "Learn More", href: "/shop" },
     image: {
-      src: "https://i.ibb.co.com/0jkzk10T/images-3.jpg",
+      src: "https://i.ibb.co.com/PvbPWmDY/Gemini-Generated-Image-8flxli8flxli8flx.jpg",
       alt: "Cattle feed banner",
     },
     fallbackTint: "22, 101, 52", // green-ish (used before auto-extraction runs)
@@ -59,7 +59,7 @@ export const heroSlides = [
     },
     secondaryCta: { label: "View Products", href: "/shop" },
     image: {
-      src: "https://i.ibb.co.com/fdmb0y0c/1600w-G7-SBk-GP9g-A8.jpg",
+      src: "https://i.ibb.co.com/5gmYjHJS/Gemini-Generated-Image-7p1cyl7p1cyl7p1c.jpg",
       alt: "Poultry feed banner",
     },
     fallbackTint: "36, 59, 83",
@@ -73,7 +73,7 @@ export const heroSlides = [
     primaryCta: { label: "Explore Fish Feed", href: "/categories/fish-feed" },
     secondaryCta: { label: "Learn More", href: "/shop" },
     image: {
-      src: "https://i.ibb.co.com/RTDbKcwH/images-4.jpg",
+      src: "https://i.ibb.co.com/pvQghq97/Gemini-Generated-Image-f2qd1rf2qd1rf2qd.jpg",
       alt: "Fish feed banner",
     },
     fallbackTint: "249, 115, 22",

@@ -12,6 +12,7 @@ import ProductSection from "@/components/home/product-section";
 import ConsultancySection from "@/components/home/ConsultancySection";
 import VideoSection from "@/components/home/VideoSection";
 import NewsSection from "@/components/home/NewsSection";
+import GlobalSourcing from "@/components/home/GlobalSourcing";
 
 export default function Home() {
   return (
@@ -20,11 +21,12 @@ export default function Home() {
       <AboutSection />
 
       <MissionSection />
-
+  
       <ProductSection />
       <ConsultancySection />
       <VideoSection/>
       <NewsSection/>
+      <GlobalSourcing/>
     </div>
   );
 }

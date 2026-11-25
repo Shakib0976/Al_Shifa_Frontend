@@ -91,7 +91,7 @@ export default function ProductSection() {
         >
           <h2
             id="products-heading"
-            className="text-2xl font-bold tracking-tight text-foreground sm:text-3xl md:text-4xl lg:text-5xl"
+            className="text-2xl font-bold tracking-tight text-[#0B0B4A] sm:text-3xl lg:text-4xl"
           >
             Products of Al-Shifa
           </h2>
@@ -99,11 +99,11 @@ export default function ProductSection() {
           {/* Decorative divider under title */}
           <div
             aria-hidden="true"
-            className="mt-3 flex items-center justify-center gap-2 sm:mt-4"
+            className="mt-4 flex w-full max-w-3xl items-center gap-3"
           >
-            <span className="h-0.5 w-8 rounded-full bg-primary/30 sm:w-12" />
-            <span className="h-2 w-2 rotate-45 rounded-[2px] bg-primary sm:h-2.5 sm:w-2.5" />
-            <span className="h-0.5 w-8 rounded-full bg-primary/30 sm:w-12" />
+            <span className="h-[2px] flex-1 rounded-full bg-gradient-to-r from-transparent via-[#E3B04B]/60 to-[#E3B04B]" />
+            <span className="h-2.5 w-2.5 rotate-45 rounded-[2px] bg-[#E3B04B]" />
+            <span className="h-[2px] flex-1 rounded-full bg-gradient-to-l from-transparent via-[#E3B04B]/60 to-[#E3B04B]" />
           </div>
         </div>
 
