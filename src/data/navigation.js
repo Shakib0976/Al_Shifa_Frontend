@@ -14,10 +14,10 @@ export const siteConfig = {
   name: "Al-Shifa",
   subtitle: "ANIMAL SCIENCE",
   contact: {
-    facebook: "https://facebook.com/your-page",   // ← update
-    whatsapp: "https://wa.me/10000000000",        // ← update
-    email: "info@alshifa.example.com",            // ← update
-    phone: "+10000000000",                        // ← update
+    facebook: "https://facebook.com/your-page", 
+    whatsapp: "https://wa.me/10000000000",        
+    email: "info@alshifa.example.com",          
+    phone: "+10000000000",                      
   },
 };
 
