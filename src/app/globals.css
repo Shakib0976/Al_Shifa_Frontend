@@ -196,8 +196,27 @@
 
 @import "tailwindcss";
 
+@keyframes preloader-fade-out {
+  to {
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+  }
+}
+
 @layer components {
   .container-responsive {
     @apply w-full mx-auto px-4 sm:px-6 md:w-11/12 lg:w-11/12 xl:max-w-[1280px];
+  }
+
+  .preloader-overlay {
+    animation: preloader-fade-out 700ms ease-in 2s forwards;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .preloader-overlay {
+      animation-duration: 1ms;
+      animation-delay: 0s;
+    }
   }
 }
