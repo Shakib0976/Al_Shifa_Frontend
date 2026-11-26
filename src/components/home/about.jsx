@@ -3,14 +3,13 @@
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 
-
 const about = {
   title: "About AL-Shifa",
   description:
     "Al-Shifa Animal Health is a jointly owned veterinary medicine company based on import, trade & distribution. The main function of the company is to source good quality animal health products which will be effective for our local market, from overseas markets. We supply our best quality products throughout Bangladesh which are imported from Europe & Southest Asia. The management of NutriSun Animal Health has 10+ years of experience in various division of Animal health sector.",
   cta: { label: "Contact Us", href: "/contact" },
   image: {
-    src: "https://i.ibb.co.com/r2wBjykn/Veterinary-Care-for-Healthier-Tomorrow.png", 
+    src: "https://i.ibb.co.com/r2wBjykn/Veterinary-Care-for-Healthier-Tomorrow.png",
     alt: "Veterinarian vaccinating a hen",
   },
 };

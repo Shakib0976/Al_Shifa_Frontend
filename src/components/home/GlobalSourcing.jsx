@@ -59,8 +59,10 @@ export default function GlobalSourcing() {
   const routeRefs = useRef([]);
   const barRefs = useRef([]);
   const dotRef = useRef(null);
-  const startedRef = useRef(false);
+  const routeTweenRef = useRef(null);
   const autoRef = useRef(null);
+  const isPausedRef = useRef(false);
+  const [isAnimationReady, setIsAnimationReady] = useState(false);
   const [active, setActive] = useState(0);
 
   /* ---------------- Scroll reveal (runs once) ---------------- */
@@ -68,10 +70,7 @@ export default function GlobalSourcing() {
     const root = sectionRef.current;
     if (!root) return;
 
-    if (reduced()) {
-      startedRef.current = true;
-      return;
-    }
+    if (reduced()) return;
 
     const ctx = gsap.context(() => {
       routeRefs.current.forEach((r) => {
@@ -82,7 +81,20 @@ export default function GlobalSourcing() {
 
       const tl = gsap.timeline({
         defaults: { ease: "power3.out" },
-        scrollTrigger: { trigger: root, start: "top 72%", once: true },
+        scrollTrigger: {
+          trigger: root,
+          start: "top 72%",
+          once: true,
+          onEnter: () => {
+            routeTweenRef.current = gsap.to(routeRefs.current, {
+              strokeDashoffset: 0,
+              duration: 1.2,
+              stagger: 0.1,
+              ease: "power2.inOut",
+              onComplete: () => setIsAnimationReady(true),
+            });
+          },
+        },
       });
 
       tl.from("[data-line]", { yPercent: 110, duration: 0.9, stagger: 0.12 })
@@ -97,15 +109,7 @@ export default function GlobalSourcing() {
           { y: 50, opacity: 0, scale: 0.97, duration: 1.1, ease: "power3.out" },
           0.2,
         )
-        .from("[data-node]", { scale: 0, duration: 0.6, stagger: 0.08, ease: "back.out(2.4)" }, 0.9)
-        .to(
-          routeRefs.current,
-          { strokeDashoffset: 0, duration: 1.4, stagger: 0.12, ease: "power2.inOut" },
-          1.1,
-        )
-        .call(() => {
-          startedRef.current = true;
-        }, null, 2.6);
+        .from("[data-node]", { scale: 0, duration: 0.6, stagger: 0.08, ease: "back.out(2.4)" }, 0.9);
 
       // pulsing rings on the destination
       gsap.fromTo(
@@ -122,7 +126,10 @@ export default function GlobalSourcing() {
       );
     }, root);
 
-    return () => ctx.revert();
+    return () => {
+      routeTweenRef.current?.kill();
+      ctx.revert();
+    };
   }, []);
 
   /* ---------------- Active route: highlight + travelling dot ---------------- */
@@ -141,7 +148,7 @@ export default function GlobalSourcing() {
       });
     });
 
-    if (reduced()) {
+    if (reduced() || !isAnimationReady) {
       gsap.set(dot, { opacity: 0 });
       return;
     }
@@ -155,10 +162,6 @@ export default function GlobalSourcing() {
       repeat: -1,
       repeatDelay: 0.4,
       onUpdate: () => {
-        if (!startedRef.current) {
-          gsap.set(dot, { opacity: 0 });
-          return;
-        }
         const pt = route.getPointAtLength(proxy.p * len);
         gsap.set(dot, {
           x: pt.x,
@@ -169,14 +172,14 @@ export default function GlobalSourcing() {
     });
 
     return () => tween.kill();
-  }, [active]);
+  }, [active, isAnimationReady]);
 
   /* ---------------- Auto-rotate with progress bar ---------------- */
   useEffect(() => {
     barRefs.current.forEach((b) => {
       if (b) gsap.set(b, { scaleX: 0, transformOrigin: "left" });
     });
-    if (reduced()) return;
+    if (reduced() || !isAnimationReady) return;
 
     const bar = barRefs.current[active];
     if (!bar) return;
@@ -187,11 +190,18 @@ export default function GlobalSourcing() {
       onComplete: () => setActive((a) => (a + 1) % countries.length),
     });
     autoRef.current = tw;
+    if (isPausedRef.current) tw.pause();
     return () => tw.kill();
-  }, [active]);
+  }, [active, isAnimationReady]);
 
-  const pause = () => autoRef.current?.pause();
-  const resume = () => autoRef.current?.resume();
+  const pause = () => {
+    isPausedRef.current = true;
+    autoRef.current?.pause();
+  };
+  const resume = () => {
+    isPausedRef.current = false;
+    autoRef.current?.resume();
+  };
 
   const current = countries[active];
 
