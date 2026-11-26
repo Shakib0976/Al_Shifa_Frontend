@@ -19,6 +19,8 @@ export const metadata = {
   description: "Animal food and nutrition products",
 };
 
+export const instant = false; // ⭐ এই লাইনটা যোগ করো
+
 export default function RootLayout({ children }) {
   return (
     <html lang="en" className={`${montserrat.variable} ${openSans.variable}`}>

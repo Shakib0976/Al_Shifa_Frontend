@@ -7,7 +7,6 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 
 import {
   Mail,
-  Phone,
   MapPin,
   Clock,
   ArrowUpRight,
@@ -126,7 +125,7 @@ export function ContactDetails() {
       }
 
       setStatus("success");
-      setFeedback("Your message has been sent successfully. Thank you for contacting Al-Shifa!");
+      setFeedback(result.message || "Your message has been sent successfully.");
 
       form.reset();
 

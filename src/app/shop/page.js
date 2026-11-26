@@ -1,15 +1,31 @@
 import Link from "next/link";
 import { ProductCard } from "@/components/products/product-card";
-import { products } from "@/data/products";
 
 export const metadata = {
   title: "Shop",
   description: "Browse animal nutrition and care products.",
 };
 
+// ⭐ এই লাইনটা ওয়ার্নিং ঠিক করবে
+export const instant = false; 
+
+async function getProducts() {
+  const res = await fetch("http://localhost:3000/api/products", {
+    cache: "no-store",
+  });
+
+  if (!res.ok) {
+    throw new Error("Failed to fetch products");
+  }
+
+  return res.json();
+}
+
 export default async function ShopPage({ searchParams }) {
+  const products = await getProducts();
   const { category } = await searchParams;
   const categoryFilter = typeof category === "string" ? category : null;
+  
   const visibleProducts = categoryFilter
     ? products.filter((product) => product.categorySlug === categoryFilter)
     : products;

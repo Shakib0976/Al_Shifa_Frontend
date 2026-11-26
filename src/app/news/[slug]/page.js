@@ -1,51 +1,50 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { news } from "@/data/news";
 
-export function generateStaticParams() {
-  return news.map((article) => ({ slug: article.slug }));
+export const instant = false;
+
+async function getNewsItem(slug) {
+  const res = await fetch(`http://localhost:3000/api/news/${slug}`, {
+    cache: "no-store",
+  });
+  if (!res.ok) return null;
+  return res.json();
 }
 
 export async function generateMetadata({ params }) {
   const { slug } = await params;
-  const article = news.find((item) => item.slug === slug);
-
-  return article
-    ? {
-        title: article.title,
-        description: article.excerpt,
-      }
-    : { title: "Article not found" };
+  const item = await getNewsItem(slug);
+  return item
+    ? { title: item.title, description: item.excerpt }
+    : { title: "News not found" };
 }
 
-export default async function NewsArticlePage({ params }) {
+export default async function NewsDetailPage({ params }) {
   const { slug } = await params;
-  const article = news.find((item) => item.slug === slug);
+  const item = await getNewsItem(slug);
 
-  if (!article) {
-    notFound();
-  }
+  if (!item) notFound();
 
   return (
-    <article className="mx-auto max-w-3xl px-6 py-14">
-      <Link
-        className="font-semibold text-emerald-800 hover:text-emerald-600"
-        href="/news"
-      >
-        <span aria-hidden="true">←</span> All news
+    <article className="mx-auto max-w-3xl px-6 py-14 md:px-10">
+      <Link href="/news" className="text-sm font-semibold text-emerald-800 hover:text-emerald-600">
+        ← Back to news
       </Link>
-      <p className="mt-8 text-sm font-semibold uppercase tracking-wider text-emerald-700">
-        {article.category} · {article.date}
+      <p className="mt-6 text-xs font-semibold uppercase text-emerald-700">
+        {item.category}
       </p>
-      <h1 className="mt-3 text-4xl font-bold tracking-tight">
-        {article.title}
-      </h1>
-      <p className="mt-5 text-lg leading-8 text-zinc-600">{article.excerpt}</p>
-      <div className="mt-8 space-y-5 leading-8 text-zinc-700">
-        {article.content.map((paragraph) => (
-          <p key={paragraph}>{paragraph}</p>
-        ))}
+      <h1 className="mt-2 text-4xl font-bold tracking-tight">{item.title}</h1>
+      <p className="mt-3 text-sm text-zinc-500">
+        {item.date} · {item.author}
+      </p>
+      <div className="mt-8 aspect-video overflow-hidden rounded-2xl bg-zinc-100">
+        <img
+          src={item.image.src}
+          alt={item.image.alt}
+          className="h-full w-full object-cover"
+        />
       </div>
+      <p className="mt-8 text-lg leading-8 text-zinc-700">{item.excerpt}</p>
     </article>
   );
 }
