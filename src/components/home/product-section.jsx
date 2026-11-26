@@ -120,9 +120,17 @@ export default function ProductSection({ products }) {
               )}
             >
               <div className="relative flex aspect-square w-full items-center justify-center overflow-hidden bg-primary/10 sm:aspect-[4/3]">
-                <span aria-hidden="true" className="text-6xl text-primary">
-                  {product.icon || "🐾"}
-                </span>
+                {product.image?.src ? (
+                  <img
+                    src={product.image.src}
+                    alt={product.image.alt || product.name}
+                    className="h-full w-full object-contain p-3"
+                  />
+                ) : (
+                  <span aria-hidden="true" className="text-6xl text-primary">
+                    {product.icon || "🐾"}
+                  </span>
+                )}
 
                 {product.category && (
                   <span className="absolute left-2 top-2 z-10 rounded-full bg-primary px-2 py-0.5 text-[9px] font-semibold tracking-wide text-primary-foreground sm:left-3 sm:top-3 sm:px-2.5 sm:py-1 sm:text-[10px]">

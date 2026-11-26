@@ -20,6 +20,7 @@ export default function EditNewsForm({ initialNews, error }) {
       <form
         action={`/api/news/${encodeURIComponent(initialNews.slug)}`}
         method="post"
+        encType="multipart/form-data"
         className="mt-6 space-y-4"
       >
         <div>
@@ -103,6 +104,21 @@ export default function EditNewsForm({ initialNews, error }) {
           />
         </div>
         <div>
+          <label htmlFor="image" className="block text-sm font-medium text-zinc-700">
+            Replace news image
+          </label>
+          <input
+            id="image"
+            type="file"
+            name="image"
+            accept="image/avif,image/gif,image/jpeg,image/png,image/webp"
+            className="mt-1 block w-full rounded-lg border border-zinc-300 px-3 py-2 text-sm"
+          />
+          <p className="mt-1 text-xs text-zinc-500">
+            Leave empty to keep the current image, or enter a new image URL below.
+          </p>
+        </div>
+        <div>
           <label htmlFor="imageSrc" className="block text-sm font-medium text-zinc-700">
             Image URL
           </label>
@@ -111,7 +127,6 @@ export default function EditNewsForm({ initialNews, error }) {
             type="url"
             name="imageSrc"
             defaultValue={initialNews.image?.src || ""}
-            required
             className="mt-1 w-full rounded-lg border border-zinc-300 px-3 py-2 focus:border-emerald-500 focus:outline-none"
           />
         </div>
@@ -124,7 +139,6 @@ export default function EditNewsForm({ initialNews, error }) {
             type="text"
             name="imageAlt"
             defaultValue={initialNews.image?.alt || ""}
-            required
             className="mt-1 w-full rounded-lg border border-zinc-300 px-3 py-2 focus:border-emerald-500 focus:outline-none"
           />
         </div>

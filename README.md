@@ -16,6 +16,13 @@ bun dev
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
+## Product and news image uploads
+
+Product and news images can be uploaded to ImgBB from the server. Add your
+ImgBB API key to `.env.local` as `IMGBB_API_KEY=your_api_key`, then restart the
+development server. Configure the same variable in your deployment environment.
+Do not use a `NEXT_PUBLIC_` prefix for this key.
+
 You can start editing the page by modifying `app/page.js`. The page auto-updates as you edit the file.
 
 This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.

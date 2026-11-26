@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server';
 import dbConnect from '@/lib/mongodb';
 import Product from '@/models/Product';
 import { isAdminAuthenticated } from '@/lib/admin-auth';
+import { uploadImageToImgBB } from '@/lib/imgbb';
 
 function redirectToPath(request, path) {
   const response = NextResponse.redirect(new URL(path, request.url), 303);
@@ -110,9 +111,23 @@ export async function POST(request, { params }) {
       description: String(formData.get('description') || '').trim(),
       price: Number(formData.get('price')),
       unit: String(formData.get('unit') || '').trim(),
-      icon: String(formData.get('icon') || '').trim(),
       highlights,
     };
+    const imageFile = formData.get('image');
+    const imageSrc = String(formData.get('imageSrc') || '').trim();
+    const imageAlt = String(formData.get('imageAlt') || '').trim();
+
+    if (imageFile && typeof imageFile !== 'string' && imageFile.size > 0) {
+      body.image = {
+        ...(await uploadImageToImgBB(imageFile)),
+        alt: imageAlt || body.name,
+      };
+    } else if (imageSrc) {
+      body.image = {
+        src: imageSrc,
+        alt: imageAlt || body.name,
+      };
+    }
 
     const updatedProduct = await Product.findOneAndUpdate({ slug }, body, {
       new: true,

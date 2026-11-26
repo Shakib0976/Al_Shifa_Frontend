@@ -4,11 +4,16 @@ import { formatCurrency } from "@/lib/utils";
 export function ProductDetails({ product }) {
   return (
     <article className="mx-auto grid max-w-7xl gap-10 px-6 py-14 md:grid-cols-2 md:px-10">
-      <div
-        aria-hidden="true"
-        className="flex min-h-72 items-center justify-center rounded-3xl bg-emerald-50 text-8xl"
-      >
-        {product.icon}
+      <div className="flex min-h-72 items-center justify-center overflow-hidden rounded-3xl bg-emerald-50 text-8xl">
+        {product.image?.src ? (
+          <img
+            src={product.image.src}
+            alt={product.image.alt || product.name}
+            className="max-h-[32rem] w-full object-contain p-4"
+          />
+        ) : (
+          <span aria-hidden="true">{product.icon || "🐾"}</span>
+        )}
       </div>
       <div className="self-center">
         <Link

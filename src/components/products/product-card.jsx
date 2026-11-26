@@ -4,11 +4,16 @@ import { formatCurrency } from "@/lib/utils";
 export function ProductCard({ product }) {
   return (
     <article className="flex flex-col rounded-2xl border border-zinc-200 bg-white p-6 transition hover:border-emerald-300 hover:shadow-sm">
-      <div
-        aria-hidden="true"
-        className="flex h-36 items-center justify-center rounded-xl bg-emerald-50 text-5xl"
-      >
-        {product.icon}
+      <div className="flex h-36 items-center justify-center overflow-hidden rounded-xl bg-emerald-50 text-5xl">
+        {product.image?.src ? (
+          <img
+            src={product.image.src}
+            alt={product.image.alt || product.name}
+            className="h-full w-full object-contain p-2"
+          />
+        ) : (
+          <span aria-hidden="true">{product.icon || "🐾"}</span>
+        )}
       </div>
       <p className="mt-5 text-sm font-medium text-emerald-700">
         {product.category}

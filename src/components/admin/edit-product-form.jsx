@@ -20,6 +20,7 @@ export default function EditProductForm({ initialProduct, error }) {
       <form
         action={`/api/products/${encodeURIComponent(initialProduct.slug)}`}
         method="post"
+        encType="multipart/form-data"
         className="mt-6 space-y-4"
       >
         <div>
@@ -120,14 +121,41 @@ export default function EditProductForm({ initialProduct, error }) {
           </div>
         </div>
         <div>
-          <label htmlFor="icon" className="block text-sm font-medium text-zinc-700">
-            Icon (emoji)
+          <label htmlFor="image" className="block text-sm font-medium text-zinc-700">
+            Replace product image
           </label>
           <input
-            id="icon"
+            id="image"
+            type="file"
+            name="image"
+            accept="image/avif,image/gif,image/jpeg,image/png,image/webp"
+            className="mt-1 block w-full rounded-lg border border-zinc-300 px-3 py-2 text-sm"
+          />
+          <p className="mt-1 text-xs text-zinc-500">
+            Leave empty to keep the current image.
+          </p>
+        </div>
+        <div>
+          <label htmlFor="imageSrc" className="block text-sm font-medium text-zinc-700">
+            Image URL
+          </label>
+          <input
+            id="imageSrc"
+            type="url"
+            name="imageSrc"
+            defaultValue={initialProduct.image?.src || ""}
+            className="mt-1 w-full rounded-lg border border-zinc-300 px-3 py-2 focus:border-emerald-500 focus:outline-none"
+          />
+        </div>
+        <div>
+          <label htmlFor="imageAlt" className="block text-sm font-medium text-zinc-700">
+            Image alt text
+          </label>
+          <input
+            id="imageAlt"
             type="text"
-            name="icon"
-            defaultValue={initialProduct.icon || ""}
+            name="imageAlt"
+            defaultValue={initialProduct.image?.alt || ""}
             className="mt-1 w-full rounded-lg border border-zinc-300 px-3 py-2 focus:border-emerald-500 focus:outline-none"
           />
         </div>

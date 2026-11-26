@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server';
 import dbConnect from '@/lib/mongodb';
 import News from '@/models/News';
 import { isAdminAuthenticated } from '@/lib/admin-auth';
+import { uploadImageToImgBB } from '@/lib/imgbb';
 
 function redirectToPath(request, path) {
   const response = NextResponse.redirect(new URL(path, request.url), 303);
@@ -87,11 +88,22 @@ export async function POST(request, { params }) {
       date: String(formData.get('date') || '').trim(),
       author: String(formData.get('author') || '').trim(),
       excerpt: String(formData.get('excerpt') || '').trim(),
-      image: {
-        src: String(formData.get('imageSrc') || '').trim(),
-        alt: String(formData.get('imageAlt') || '').trim(),
-      },
     };
+    const imageFile = formData.get('image');
+    const imageSrc = String(formData.get('imageSrc') || '').trim();
+    const imageAlt = String(formData.get('imageAlt') || '').trim();
+
+    if (imageFile && typeof imageFile !== 'string' && imageFile.size > 0) {
+      body.image = {
+        ...(await uploadImageToImgBB(imageFile)),
+        alt: imageAlt || body.title,
+      };
+    } else if (imageSrc) {
+      body.image = {
+        src: imageSrc,
+        alt: imageAlt || body.title,
+      };
+    }
 
     const updatedNews = await News.findOneAndUpdate({ slug }, body, {
       new: true,

@@ -7,7 +7,7 @@ async function EditNewsContent({ params, searchParams }) {
   const { slug } = await params;
   const { error } = await searchParams;
   const response = await fetch(
-    getApiUrl(`/api/news/${encodeURIComponent(slug)}`),
+    getApiUrl(`/api/news/${slug}`),
     { cache: "no-store" }
   );
 

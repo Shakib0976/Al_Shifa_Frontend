@@ -1,65 +1,8 @@
-"use client";
-
-import { useState } from "react";
-import { useRouter } from "next/navigation";
+import { Suspense } from "react";
 import Link from "next/link";
 
-export default function NewNewsPage() {
-  const router = useRouter();
-  const [formData, setFormData] = useState({
-    title: "",
-    slug: "",
-    category: "",
-    date: "",
-    author: "Al-Shifa",
-    excerpt: "",
-    imageSrc: "",
-    imageAlt: "",
-  });
-  const [error, setError] = useState("");
-  const [loading, setLoading] = useState(false);
-
-  const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
-  };
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    setLoading(true);
-    setError("");
-
-    try {
-      const payload = {
-        slug: formData.slug,
-        title: formData.title,
-        category: formData.category,
-        date: formData.date,
-        author: formData.author,
-        excerpt: formData.excerpt,
-        image: {
-          src: formData.imageSrc,
-          alt: formData.imageAlt,
-        },
-      };
-
-      const res = await fetch("/api/news", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payload),
-      });
-
-      if (res.ok) {
-        window.location.href = "/admin/news";
-      } else {
-        const data = await res.json();
-        setError(data.error || "Failed to create news");
-      }
-    } catch (err) {
-      setError("Something went wrong.");
-    } finally {
-      setLoading(false);
-    }
-  };
+async function NewNewsContent({ searchParams }) {
+  const { error } = await searchParams;
 
   return (
     <div className="mx-auto max-w-2xl">
@@ -68,25 +11,38 @@ export default function NewNewsPage() {
       </Link>
       <h1 className="mt-3 text-2xl font-bold">Add News Article</h1>
 
-      <form onSubmit={handleSubmit} className="mt-6 space-y-4">
+      {typeof error === "string" && error && (
+        <p className="mt-4 text-sm text-red-600" role="alert">
+          {error}
+        </p>
+      )}
+
+      <form
+        action="/api/news"
+        method="post"
+        encType="multipart/form-data"
+        className="mt-6 space-y-4"
+      >
         <div>
-          <label className="block text-sm font-medium text-zinc-700">Title</label>
+          <label htmlFor="title" className="block text-sm font-medium text-zinc-700">
+            Title
+          </label>
           <input
+            id="title"
             type="text"
             name="title"
-            value={formData.title}
-            onChange={handleChange}
             required
             className="mt-1 w-full rounded-lg border border-zinc-300 px-3 py-2 focus:border-emerald-500 focus:outline-none"
           />
         </div>
         <div>
-          <label className="block text-sm font-medium text-zinc-700">Slug</label>
+          <label htmlFor="slug" className="block text-sm font-medium text-zinc-700">
+            Slug
+          </label>
           <input
+            id="slug"
             type="text"
             name="slug"
-            value={formData.slug}
-            onChange={handleChange}
             required
             placeholder="e.g. winter-care-tips"
             className="mt-1 w-full rounded-lg border border-zinc-300 px-3 py-2 focus:border-emerald-500 focus:outline-none"
@@ -94,84 +50,109 @@ export default function NewNewsPage() {
         </div>
         <div className="grid gap-4 sm:grid-cols-2">
           <div>
-            <label className="block text-sm font-medium text-zinc-700">Category</label>
+            <label htmlFor="category" className="block text-sm font-medium text-zinc-700">
+              Category
+            </label>
             <input
+              id="category"
               type="text"
               name="category"
-              value={formData.category}
-              onChange={handleChange}
               required
               className="mt-1 w-full rounded-lg border border-zinc-300 px-3 py-2 focus:border-emerald-500 focus:outline-none"
             />
           </div>
           <div>
-            <label className="block text-sm font-medium text-zinc-700">Date</label>
+            <label htmlFor="date" className="block text-sm font-medium text-zinc-700">
+              Date
+            </label>
             <input
+              id="date"
               type="date"
               name="date"
-              value={formData.date}
-              onChange={handleChange}
               required
               className="mt-1 w-full rounded-lg border border-zinc-300 px-3 py-2 focus:border-emerald-500 focus:outline-none"
             />
           </div>
         </div>
         <div>
-          <label className="block text-sm font-medium text-zinc-700">Author</label>
+          <label htmlFor="author" className="block text-sm font-medium text-zinc-700">
+            Author
+          </label>
           <input
+            id="author"
             type="text"
             name="author"
-            value={formData.author}
-            onChange={handleChange}
+            defaultValue="Al-Shifa"
             required
             className="mt-1 w-full rounded-lg border border-zinc-300 px-3 py-2 focus:border-emerald-500 focus:outline-none"
           />
         </div>
         <div>
-          <label className="block text-sm font-medium text-zinc-700">Excerpt</label>
+          <label htmlFor="excerpt" className="block text-sm font-medium text-zinc-700">
+            Excerpt
+          </label>
           <textarea
+            id="excerpt"
             name="excerpt"
-            value={formData.excerpt}
-            onChange={handleChange}
             required
             rows={3}
             className="mt-1 w-full rounded-lg border border-zinc-300 px-3 py-2 focus:border-emerald-500 focus:outline-none"
           />
         </div>
         <div>
-          <label className="block text-sm font-medium text-zinc-700">Image URL</label>
+          <label htmlFor="image" className="block text-sm font-medium text-zinc-700">
+            News image
+          </label>
           <input
+            id="image"
+            type="file"
+            name="image"
+            accept="image/avif,image/gif,image/jpeg,image/png,image/webp"
+            className="mt-1 block w-full rounded-lg border border-zinc-300 px-3 py-2 text-sm"
+          />
+          <p className="mt-1 text-xs text-zinc-500">
+            Choose an image to upload to ImgBB, or provide an image URL below.
+          </p>
+        </div>
+        <div>
+          <label htmlFor="imageSrc" className="block text-sm font-medium text-zinc-700">
+            Image URL
+          </label>
+          <input
+            id="imageSrc"
             type="url"
             name="imageSrc"
-            value={formData.imageSrc}
-            onChange={handleChange}
-            required
             placeholder="https://..."
             className="mt-1 w-full rounded-lg border border-zinc-300 px-3 py-2 focus:border-emerald-500 focus:outline-none"
           />
         </div>
         <div>
-          <label className="block text-sm font-medium text-zinc-700">Image Alt Text</label>
+          <label htmlFor="imageAlt" className="block text-sm font-medium text-zinc-700">
+            Image alt text
+          </label>
           <input
+            id="imageAlt"
             type="text"
             name="imageAlt"
-            value={formData.imageAlt}
-            onChange={handleChange}
-            required
+            placeholder="Describe the news image"
             className="mt-1 w-full rounded-lg border border-zinc-300 px-3 py-2 focus:border-emerald-500 focus:outline-none"
           />
         </div>
-
-        {error && <p className="text-sm text-red-600">{error}</p>}
-
         <button
           type="submit"
-          disabled={loading}
-          className="w-full rounded-lg bg-emerald-700 px-4 py-2 font-semibold text-white hover:bg-emerald-800 disabled:opacity-50"
+          className="w-full rounded-lg bg-emerald-700 px-4 py-2 font-semibold text-white hover:bg-emerald-800"
         >
-          {loading ? "Creating..." : "Create News"}
+          Create News
         </button>
       </form>
     </div>
+  );
+}
+
+export default function NewNewsPage(props) {
+  return (
+    <Suspense fallback={<p className="text-sm text-zinc-500">Loading news form...</p>}>
+      <NewNewsContent {...props} />
+    </Suspense>
   );
 }

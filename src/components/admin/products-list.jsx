@@ -31,7 +31,13 @@ export default function ProductsList({ initialProducts }) {
           className="flex flex-col gap-4 rounded-xl border border-zinc-200 bg-white p-4 shadow-sm sm:flex-row sm:items-center sm:justify-between sm:p-5"
         >
           <div className="flex flex-1 items-start gap-4">
-            {product.icon ? (
+            {product.image?.src ? (
+              <img
+                src={product.image.src}
+                alt={product.image.alt || product.name}
+                className="h-16 w-16 shrink-0 rounded-lg bg-emerald-50 object-contain"
+              />
+            ) : product.icon ? (
               <div className="flex h-16 w-16 shrink-0 items-center justify-center rounded-lg bg-emerald-50 text-3xl">
                 {product.icon}
               </div>

@@ -7,7 +7,7 @@ async function EditProductContent({ params, searchParams }) {
   const { slug } = await params;
   const { error } = await searchParams;
   const response = await fetch(
-    getApiUrl(`/api/products/${encodeURIComponent(slug)}`),
+    getApiUrl(`/api/products/${slug}`),
     { cache: "no-store" }
   );
 
