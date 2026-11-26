@@ -2,18 +2,16 @@
 
 import { useEffect, useRef } from "react";
 import Link from "next/link";
-import Image from "next/image";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { ArrowRight } from "lucide-react";
-import { products } from "@/data/productsData";
 import { cn } from "@/lib/utils";
 
 if (typeof window !== "undefined") {
   gsap.registerPlugin(ScrollTrigger);
 }
 
-export default function ProductSection() {
+export default function ProductSection({ products }) {
   const sectionRef = useRef(null);
   const headerRef = useRef(null);
   const gridRef = useRef(null);
@@ -114,22 +112,17 @@ export default function ProductSection() {
         >
           {visibleProducts.map((product) => (
             <article
-              key={product.id}
+              key={product._id || product.slug}
               data-card
               className={cn(
                 "group relative flex flex-col overflow-hidden rounded-sm border border-border",
                 "bg-card shadow-sm transition-shadow duration-300 hover:shadow-md",
               )}
             >
-              {/* Product image (top) */}
-              <div className="relative aspect-square w-full overflow-hidden sm:aspect-[4/3]">
-                <Image
-                  src={product.image.src}
-                  alt={product.image.alt}
-                  fill
-                  sizes="(max-width: 640px) 50vw, (max-width: 768px) 50vw, (max-width: 1024px) 33vw, 25vw"
-                  className="object-cover transition-transform duration-500 group-hover:scale-105"
-                />
+              <div className="relative flex aspect-square w-full items-center justify-center overflow-hidden bg-primary/10 sm:aspect-[4/3]">
+                <span aria-hidden="true" className="text-6xl text-primary">
+                  {product.icon || "🐾"}
+                </span>
 
                 {product.category && (
                   <span className="absolute left-2 top-2 z-10 rounded-full bg-primary px-2 py-0.5 text-[9px] font-semibold tracking-wide text-primary-foreground sm:left-3 sm:top-3 sm:px-2.5 sm:py-1 sm:text-[10px]">
@@ -141,7 +134,7 @@ export default function ProductSection() {
               {/* Card content */}
               <div className="relative flex flex-1 flex-col p-3 sm:p-4 md:p-4 lg:p-5">
                 <h3 className="line-clamp-2 text-sm font-bold leading-snug tracking-tight text-foreground sm:text-base md:text-base lg:text-lg">
-                  {product.title}
+                  {product.name}
                 </h3>
 
                 <p className="mt-1.5 line-clamp-2 text-[11px] leading-relaxed text-muted-foreground sm:mt-2 sm:text-xs md:text-sm">
@@ -150,7 +143,7 @@ export default function ProductSection() {
 
                 <div className="mt-auto pt-3 sm:pt-4">
                   <Link
-                    href={product.href ?? `/products/${product.slug}`}
+                    href={`/products/${product.slug}`}
                     className={cn(
                       "inline-flex w-full items-center justify-center gap-1.5 rounded-sm",
                       "border border-primary/30 bg-primary/10 px-3 py-2 text-[11px] font-semibold text-primary",
@@ -159,7 +152,7 @@ export default function ProductSection() {
                       "focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary",
                       "sm:text-xs md:text-sm",
                     )}
-                    aria-label={`Read more about ${product.title}`}
+                    aria-label={`Read more about ${product.name}`}
                   >
                     Read More
                     <ArrowRight className="h-3 w-3 transition-transform group-hover:translate-x-0.5 sm:h-3.5 sm:w-3.5" />

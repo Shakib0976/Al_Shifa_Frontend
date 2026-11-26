@@ -1,11 +1,11 @@
 import { notFound } from "next/navigation";
 import { ProductDetails } from "@/components/products/product-details";
+import { getApiUrl } from "@/lib/api-url";
 
 export const instant = false;
 
 async function getProduct(slug) {
-  // ⭐ এখানে products এর API কল হবে, news এর না
-  const res = await fetch(`http://localhost:3000/api/products/${slug}`, {
+  const res = await fetch(getApiUrl(`/api/products/${slug}`), {
     cache: "no-store",
   });
 

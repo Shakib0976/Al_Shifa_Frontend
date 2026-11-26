@@ -1,10 +1,11 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import { getApiUrl } from "@/lib/api-url";
 
 export const instant = false;
 
 async function getNewsItem(slug) {
-  const res = await fetch(`http://localhost:3000/api/news/${slug}`, {
+  const res = await fetch(getApiUrl(`/api/news/${slug}`), {
     cache: "no-store",
   });
   if (!res.ok) return null;

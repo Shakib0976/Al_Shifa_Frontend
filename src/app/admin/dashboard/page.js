@@ -1,40 +1,27 @@
-"use client";
-
-import { useEffect, useState } from "react";
 import Link from "next/link";
+import { getApiUrl } from "@/lib/api-url";
 
-export default function AdminDashboard() {
-  const [data, setData] = useState(null);
-  const [loading, setLoading] = useState(true);
+export default async function AdminDashboard() {
+  const response = await fetch(getApiUrl("/api/dashboard"), {
+    cache: "no-store",
+  });
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const res = await fetch("/api/dashboard");
-        const result = await res.json();
-        setData(result);
-      } catch (error) {
-        console.error(error);
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetchData();
-  }, []);
-
-  if (loading) {
-    return (
-      <div className="flex items-center justify-center p-10">
-        <p className="text-zinc-500">Loading dashboard...</p>
-      </div>
-    );
+  if (!response.ok) {
+    throw new Error(`Unable to load dashboard data (${response.status}).`);
   }
 
-  if (!data) {
-    return <p className="p-10 text-red-600">Failed to load dashboard.</p>;
+  const data = await response.json();
+
+  if (
+    !data?.counts ||
+    !Array.isArray(data.recentProducts) ||
+    !Array.isArray(data.recentNews) ||
+    !Array.isArray(data.recentMessages)
+  ) {
+    throw new Error("The dashboard API returned an invalid response.");
   }
 
-  const { counts, recentProducts, recentMessages } = data;
+  const { counts, recentProducts, recentNews, recentMessages } = data;
 
   const stats = [
     { label: "Products", value: counts.products, href: "/admin/products", accent: "text-blue-600" },
@@ -48,7 +35,7 @@ export default function AdminDashboard() {
       <div>
         <h1 className="text-2xl font-bold text-zinc-800">Dashboard</h1>
         <p className="mt-1 text-sm text-zinc-500">
-          Welcome back! Here's what's happening in your store.
+          Welcome back! Here&apos;s what&apos;s happening in your store.
         </p>
       </div>
 
@@ -67,7 +54,7 @@ export default function AdminDashboard() {
         ))}
       </div>
 
-      <div className="grid gap-6 lg:grid-cols-2">
+      <div className="grid gap-6 lg:grid-cols-3">
         {/* Recent Products */}
         <div className="rounded-2xl border border-zinc-200 bg-white p-5">
           <div className="flex items-center justify-between">
@@ -87,6 +74,31 @@ export default function AdminDashboard() {
               >
                 <span className="text-sm font-medium text-zinc-700">{product.name}</span>
                 <span className="text-sm text-zinc-500">৳{product.price}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
+
+        <div className="rounded-2xl border border-zinc-200 bg-white p-5">
+          <div className="flex items-center justify-between">
+            <h2 className="text-lg font-semibold text-zinc-800">Recent News</h2>
+            <Link href="/admin/news" className="text-sm text-emerald-700 hover:underline">
+              View all
+            </Link>
+          </div>
+          <ul className="mt-4 space-y-3">
+            {recentNews.length === 0 && (
+              <p className="text-sm text-zinc-500">No news yet.</p>
+            )}
+            {recentNews.map((news) => (
+              <li
+                key={news._id}
+                className="border-b border-zinc-100 pb-2 last:border-0"
+              >
+                <p className="text-sm font-medium text-zinc-700">{news.title}</p>
+                <p className="text-xs text-zinc-500">
+                  {news.category} · {news.date}
+                </p>
               </li>
             ))}
           </ul>

@@ -1,7 +1,6 @@
 import { useId } from "react";
 import Link from "next/link";
 import { ArrowRight, CalendarDays, User } from "lucide-react";
-import { news } from "@/data/news";
 
 const sectionTitle = "Animal Health News";
 
@@ -16,7 +15,7 @@ const formatDate = (iso) =>
     timeZone: "UTC",
   });
 
-export default function NewsSection() {
+export default function NewsSection({ news }) {
   const headingId = useId();
   const items = news.slice(0, LIMIT);
 

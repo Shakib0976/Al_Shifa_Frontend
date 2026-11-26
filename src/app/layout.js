@@ -3,6 +3,8 @@ import { Montserrat, Open_Sans } from "next/font/google";
 import "./globals.css";
 import Footer from "@/components/layout/footer";
 import Preloader from "@/components/loader/preLoader";
+import { Suspense } from "react";
+import AuthButton from "@/components/layout/auth-button";
 
 const montserrat = Montserrat({
   subsets: ["latin"],
@@ -28,7 +30,20 @@ export default function RootLayout({ children }) {
         className={`${openSans.className} min-h-screen bg-background text-foreground antialiased`}
       >
         <Preloader />
-        <Navbar />
+        <Navbar
+          authButton={
+            <Suspense
+              fallback={
+                <span
+                  aria-hidden="true"
+                  className="inline-block h-8 w-[88px] rounded-lg bg-zinc-100"
+                />
+              }
+            >
+              <AuthButton />
+            </Suspense>
+          }
+        />
         <main>{children}</main>
         <Footer />
       </body>

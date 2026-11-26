@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { usePathname, useRouter } from "next/navigation";
+import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
 
 const menuItems = [
@@ -13,16 +13,6 @@ const menuItems = [
 
 export default function Sidebar() {
   const pathname = usePathname();
-  const router = useRouter();
-
-  const handleLogout = async () => {
-    try {
-      await fetch("/api/auth/logout", { method: "POST" });
-      window.location.href = "/login";
-    } catch (error) {
-      console.error(error);
-    }
-  };
 
   return (
     <aside className="flex w-64 flex-col border-r border-zinc-200 bg-white">
@@ -54,12 +44,14 @@ export default function Sidebar() {
 
       {/* Logout বাটন */}
       <div className="border-t border-zinc-200 p-3">
-        <button
-          onClick={handleLogout}
-          className="w-full rounded-lg px-3 py-2 text-left text-sm font-medium text-red-600 hover:bg-red-50"
-        >
-          Logout
-        </button>
+        <form action="/api/auth/logout" method="post">
+          <button
+            type="submit"
+            className="w-full rounded-lg px-3 py-2 text-left text-sm font-medium text-red-600 hover:bg-red-50"
+          >
+            Logout
+          </button>
+        </form>
       </div>
     </aside>
   );

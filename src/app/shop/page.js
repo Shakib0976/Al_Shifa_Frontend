@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { ProductCard } from "@/components/products/product-card";
+import { getApiUrl } from "@/lib/api-url";
 
 export const metadata = {
   title: "Shop",
@@ -10,7 +11,7 @@ export const metadata = {
 export const instant = false; 
 
 async function getProducts() {
-  const res = await fetch("http://localhost:3000/api/products", {
+  const res = await fetch(getApiUrl("/api/products"), {
     cache: "no-store",
   });
 

@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { getApiUrl } from "@/lib/api-url";
 
 export const metadata = {
   title: "Categories",
@@ -9,7 +10,7 @@ export const metadata = {
 export const instant = false;
 
 async function getCategories() {
-  const res = await fetch("http://localhost:3000/api/categories", {
+  const res = await fetch(getApiUrl("/api/categories"), {
     cache: "no-store",
   });
 

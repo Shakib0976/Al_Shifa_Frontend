@@ -1,10 +1,3 @@
-import Link from "next/link";
-import { LearningCard } from "@/components/home/learning-card";
-import { NewsCard } from "@/components/news/news-card";
-import { ProductCard } from "@/components/products/product-card";
-import { products } from "@/data/products";
-import { news } from "@/data/news";
-import { videos } from "@/data/videos";
 import HeroSlider from "@/components/home/hero-slider";
 import AboutSection from "@/components/home/about";
 import MissionSection from "@/components/home/ourMission";
@@ -13,8 +6,26 @@ import ConsultancySection from "@/components/home/ConsultancySection";
 import VideoSection from "@/components/home/VideoSection";
 import NewsSection from "@/components/home/NewsSection";
 import GlobalSourcing from "@/components/home/GlobalSourcing";
+import { getApiUrl } from "@/lib/api-url";
 
-export default function Home() {
+export default async function Home() {
+  const [productsResponse, newsResponse] = await Promise.all([
+    fetch(getApiUrl("/api/products"), { cache: "no-store" }),
+    fetch(getApiUrl("/api/news"), { cache: "no-store" }),
+  ]);
+
+  if (!productsResponse.ok) {
+    throw new Error(`Unable to load home products (${productsResponse.status}).`);
+  }
+  if (!newsResponse.ok) {
+    throw new Error(`Unable to load home news (${newsResponse.status}).`);
+  }
+
+  const [products, news] = await Promise.all([
+    productsResponse.json(),
+    newsResponse.json(),
+  ]);
+
   return (
     <div>
       <HeroSlider />
@@ -22,10 +33,10 @@ export default function Home() {
 
       <MissionSection />
   
-      <ProductSection />
+      <ProductSection products={products} />
       <ConsultancySection />
       <VideoSection/>
-      <NewsSection/>
+      <NewsSection news={news} />
       <GlobalSourcing/>
     </div>
   );

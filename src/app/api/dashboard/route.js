@@ -15,6 +15,7 @@ export async function GET() {
       messageCount,
       categoryCount,
       recentProducts,
+      recentNews,
       recentMessages,
     ] = await Promise.all([
       Product.countDocuments(),
@@ -22,6 +23,7 @@ export async function GET() {
       Contact.countDocuments(),
       Category.countDocuments(),
       Product.find().sort({ createdAt: -1 }).limit(3).select("name price slug"),
+      News.find().sort({ createdAt: -1 }).limit(3).select("title category date slug"),
       Contact.find().sort({ createdAt: -1 }).limit(3).select("name email message"),
     ]);
 
@@ -33,6 +35,7 @@ export async function GET() {
         categories: categoryCount,
       },
       recentProducts,
+      recentNews,
       recentMessages,
     }, { status: 200 });
   } catch (error) {

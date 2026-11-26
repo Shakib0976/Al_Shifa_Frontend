@@ -15,7 +15,6 @@ import TopContactBar from "./top-contact-bar";
 import CategoryDropdown from "./category-dropdown";
 import SearchForm from "./search-form";
 import MobileNavigation from "./mobile-navigation";
-import AuthButton from "./auth-button";
 import { navLinks, siteConfig } from "@/data/navigation";
 import { cn } from "@/lib/utils";
 
@@ -40,7 +39,7 @@ function NavItem({ label, href, pathname }) {
   );
 }
 
-export default function Navbar() {
+export default function Navbar({ authButton }) {
   const headerRef = useRef(null);
   const topBarRef = useRef(null);
   const lastScrollY = useRef(0);
@@ -153,7 +152,7 @@ export default function Navbar() {
             <div className="hidden md:block">
               <SearchForm className="w-40 lg:w-48" />
             </div>
-            <AuthButton />
+            {authButton}
             <MobileNavigation />
           </div>
         </div>
