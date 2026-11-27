@@ -30,7 +30,7 @@ export default function NewsList({ initialNews }) {
           key={item._id || item.slug}
           className="flex flex-col gap-4 rounded-xl border border-zinc-200 bg-white p-4 shadow-sm sm:flex-row sm:items-center sm:justify-between sm:p-5"
         >
-          <div className="flex flex-1 items-start gap-4">
+          <div className="flex min-w-0 flex-1 items-start gap-3 sm:gap-4">
             {item.image?.src ? (
               <img
                 src={item.image.src}
@@ -42,17 +42,17 @@ export default function NewsList({ initialNews }) {
                 No Image
               </div>
             )}
-            <div className="flex-1">
-              <div className="flex items-center gap-2">
+            <div className="min-w-0 flex-1">
+              <div className="flex flex-wrap items-center gap-2">
                 <span className="rounded-md bg-emerald-50 px-2 py-0.5 text-xs font-semibold text-emerald-700">
                   {item.category}
                 </span>
                 <span className="text-xs text-zinc-400">{item.date}</span>
               </div>
-              <h2 className="mt-1 text-base font-semibold text-zinc-800">
+              <h2 className="mt-1 break-words text-base font-semibold text-zinc-800">
                 {item.title}
               </h2>
-              <p className="mt-1 line-clamp-1 text-sm text-zinc-500">
+              <p className="mt-1 line-clamp-1 break-words text-sm text-zinc-500">
                 {item.excerpt}
               </p>
             </div>

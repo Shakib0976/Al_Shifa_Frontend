@@ -8,7 +8,7 @@ export default function TopContactBar() {
 
   return (
     <div className="w-full bg-primary text-primary-foreground">
-      <div className="mx-auto flex h-10 max-w-11/12 items-center justify-between px-4 sm:px-6 lg:px-8">
+      <div className="mx-auto flex h-10 w-full max-w-full items-center justify-between px-4 sm:max-w-11/12 sm:px-6 lg:px-8">
         {/* Social */}
         <div className="flex items-center gap-5">
           <a

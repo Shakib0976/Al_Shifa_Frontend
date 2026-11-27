@@ -27,14 +27,14 @@ export default async function NewsDetailPage({ params }) {
   if (!item) notFound();
 
   return (
-    <article className="mx-auto max-w-3xl px-6 py-14 md:px-10">
+    <article className="mx-auto max-w-3xl px-4 py-10 sm:px-6 sm:py-14 md:px-10">
       <Link href="/news" className="text-sm font-semibold text-emerald-800 hover:text-emerald-600">
         ← Back to news
       </Link>
       <p className="mt-6 text-xs font-semibold uppercase text-emerald-700">
         {item.category}
       </p>
-      <h1 className="mt-2 text-4xl font-bold tracking-tight">{item.title}</h1>
+      <h1 className="mt-2 break-words text-3xl font-bold tracking-tight sm:text-4xl">{item.title}</h1>
       <p className="mt-3 text-sm text-zinc-500">
         {item.date} · {item.author}
       </p>

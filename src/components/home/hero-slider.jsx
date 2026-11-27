@@ -308,7 +308,7 @@ export default function HeroSlider() {
       ref={rootRef}
       aria-roledescription="carousel"
       aria-label="Featured banner"
-      className="w-full bg-background px-2 py-3  sm:py-4 md:px-6 md:py-6"
+      className="w-full bg-background px-4 py-3 sm:py-4 md:px-6 md:py-6"
       onPointerEnter={handlePointerEnter}
       onPointerLeave={handlePointerLeave}
       onPointerDown={handlePointerDown}
@@ -316,7 +316,7 @@ export default function HeroSlider() {
       onBlur={handleBlur}
       onKeyDown={handleKeyDown}
     >
-      <div className="mx-auto w-full max-w-11/12">
+      <div className="mx-auto w-full max-w-full sm:max-w-11/12">
         {/* Hero frame: banner only on small screens; banner + glass card on lg+ */}
         <div className="relative overflow-hidden rounded-2xl border border-border bg-black shadow-lg lg:rounded-3xl">
           <div
@@ -438,7 +438,7 @@ export default function HeroSlider() {
           ref={railRef}
           role="group"
           aria-label="Choose slide"
-          className="relative  mt-3 flex snap-x snap-mandatory gap-3 overflow-x-auto scroll-smooth px-3 pb-1 [scrollbar-width:none] sm:-mx-4 sm:px-4 lg:hidden [&::-webkit-scrollbar]:hidden"
+          className="relative mt-3 flex snap-x snap-mandatory gap-3 overflow-x-auto scroll-smooth px-0 pb-1 [scrollbar-width:none] sm:-mx-4 sm:px-4 lg:hidden [&::-webkit-scrollbar]:hidden"
         >
           {heroSlides.map((s, i) => {
             const active = i === index;

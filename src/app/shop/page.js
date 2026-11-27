@@ -40,9 +40,9 @@ export default async function ShopPage({ searchParams }) {
   });
 
   return (
-    <section className="mx-auto max-w-11/12 px-6 py-14 md:px-10">
+    <section className="mx-auto w-full px-4 py-10 sm:max-w-11/12 sm:px-6 sm:py-14 md:px-10">
       <div className="mb-10">
-        <h1 className="mt-2 text-4xl font-bold tracking-tight">  Al-Shifa store</h1>
+        <h1 className="mt-2 text-3xl font-bold tracking-tight sm:text-4xl">Al-Shifa store</h1>
         <p className="mt-3 max-w-2xl leading-7 text-zinc-600">
           Explore nutrition and care essentials selected for healthy animals.
         </p>
@@ -64,7 +64,7 @@ export default async function ShopPage({ searchParams }) {
         </Link>
       ) : null}
       {visibleProducts.length ? (
-        <div className="grid grid-cols-2 gap-5 md:grid-cols-3 lg:grid-cols-4">
+        <div className="grid grid-cols-2 gap-2 sm:gap-5 md:grid-cols-3 lg:grid-cols-4">
           {visibleProducts.map((product) => (
             <ProductCard key={product.slug} product={product} />
           ))}

@@ -5,15 +5,13 @@ import "react-toastify/dist/ReactToastify.css";
 
 export default function AdminLayout({ children }) {
   return (
-    <div className="flex min-h-screen">
+    <div className="flex min-h-screen flex-col md:flex-row">
       <Suspense fallback={null}>
         <AdminToast />
       </Suspense>
-      {/* বাম দিকে সাইডবার */}
       <Sidebar />
-      
-      {/* ডান দিকে কনটেন্ট */}
-      <main className="flex-1 bg-zinc-50 p-6">
+
+      <main className="min-w-0 flex-1 bg-zinc-50 p-4 sm:p-6">
         {children}
       </main>
     </div>

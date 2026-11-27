@@ -42,25 +42,25 @@ export default function MessagesList({ initialMessages }) {
       {messages.map((message) => (
         <div
           key={message._id}
-          className="rounded-xl border border-zinc-200 bg-white p-5 shadow-sm"
+          className="rounded-xl border border-zinc-200 bg-white p-4 shadow-sm sm:p-5"
         >
           <div className="flex flex-col gap-1 sm:flex-row sm:items-center sm:justify-between">
-            <div>
+            <div className="min-w-0">
               <h2 className="text-base font-semibold text-zinc-800">
                 {message.name}
               </h2>
-              <p className="text-sm text-zinc-500">{message.email}</p>
+              <p className="break-words text-sm text-zinc-500">{message.email}</p>
               {message.subject && (
-                <p className="mt-1 text-sm font-medium text-zinc-700">
+                <p className="mt-1 break-words text-sm font-medium text-zinc-700">
                   {message.subject}
                 </p>
               )}
             </div>
-            <div className="text-xs text-zinc-400">
+            <div className="break-words text-xs text-zinc-400">
               {new Date(message.createdAt).toLocaleString()}
             </div>
           </div>
-          <p className="mt-3 text-sm text-zinc-700">{message.message}</p>
+          <p className="mt-3 break-words text-sm text-zinc-700">{message.message}</p>
           <div className="mt-4 flex justify-end">
             <button
               onClick={() => handleDelete(message._id)}

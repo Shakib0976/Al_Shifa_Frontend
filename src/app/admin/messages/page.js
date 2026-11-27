@@ -1,6 +1,8 @@
 import MessagesList from "@/components/admin/messages-list";
 import { getApiUrl } from "@/lib/api-url";
 
+export const instant = false;
+
 export default async function AdminMessagesPage() {
   const response = await fetch(getApiUrl("/api/contact"), {
     cache: "no-store",

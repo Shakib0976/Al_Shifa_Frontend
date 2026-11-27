@@ -20,8 +20,8 @@ export default async function NewsPage() {
   const news = await getNews();
 
   return (
-    <section className="mx-auto max-w-7xl px-6 py-14 md:px-10">
-      <h1 className="text-4xl font-bold tracking-tight">Latest News</h1>
+    <section className="mx-auto max-w-7xl px-4 py-10 sm:px-6 sm:py-14 md:px-10">
+      <h1 className="text-3xl font-bold tracking-tight sm:text-4xl">Latest News</h1>
       <div className="mt-9 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
         {news.map((item) => (
           <Link

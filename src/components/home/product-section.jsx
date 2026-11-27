@@ -63,7 +63,7 @@ export default function ProductSection({ products }) {
     <section
       ref={sectionRef}
       aria-labelledby="products-heading"
-      className="relative w-full overflow-hidden bg-background  px-2 py-8 sm:px-3 sm:py-10 md:px-4 md:py-14 lg:py-16"
+      className="relative w-full overflow-hidden bg-background px-4 py-8 sm:px-3 sm:py-10 md:px-4 md:py-14 lg:py-16"
     >
       <div className="relative mx-auto w-full max-w-full  sm:max-w-[95%] md:max-w-11/12">
         {/* Section header */}
@@ -91,7 +91,7 @@ export default function ProductSection({ products }) {
 
         {/* Product grid */}
         <div
-          className="grid grid-cols-2 gap-2.5 sm:gap-3 md:grid-cols-3 md:gap-4 lg:grid-cols-4 lg:gap-5"
+          className="grid grid-cols-2 gap-2 sm:gap-3 md:grid-cols-3 md:gap-4 lg:grid-cols-4 lg:gap-5"
         >
           {visibleProducts.map((product) => (
             <ProductCard key={product._id || product.slug} product={product} />

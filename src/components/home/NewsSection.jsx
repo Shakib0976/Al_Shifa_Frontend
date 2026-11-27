@@ -24,7 +24,7 @@ export default function NewsSection({ news }) {
       aria-labelledby={headingId}
       className="relative w-full overflow-hidden bg-white py-14 sm:py-16 lg:py-20"
     >
-      <div className="mx-auto w-full max-w-[1760px] px-3 sm:px-8 lg:px-[4%]">
+      <div className="mx-auto w-full max-w-[1760px] px-4 sm:px-8 lg:px-[4%]">
         {/* Header */}
         <div className="flex flex-col items-center text-center">
           <h2

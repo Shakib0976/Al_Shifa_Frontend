@@ -1,6 +1,8 @@
 import Link from "next/link";
 import { getApiUrl } from "@/lib/api-url";
 
+export const instant = false;
+
 export default async function AdminDashboard() {
   const response = await fetch(getApiUrl("/api/dashboard"), {
     cache: "no-store",
@@ -72,8 +74,8 @@ export default async function AdminDashboard() {
                 key={product._id}
                 className="flex items-center justify-between border-b border-zinc-100 pb-2 last:border-0"
               >
-                <span className="text-sm font-medium text-zinc-700">{product.name}</span>
-                <span className="text-sm text-zinc-500">৳{product.price}</span>
+                <span className="min-w-0 break-words text-sm font-medium text-zinc-700">{product.name}</span>
+                <span className="shrink-0 text-sm text-zinc-500">৳{product.price}</span>
               </li>
             ))}
           </ul>
@@ -95,7 +97,7 @@ export default async function AdminDashboard() {
                 key={news._id}
                 className="border-b border-zinc-100 pb-2 last:border-0"
               >
-                <p className="text-sm font-medium text-zinc-700">{news.title}</p>
+                <p className="break-words text-sm font-medium text-zinc-700">{news.title}</p>
                 <p className="text-xs text-zinc-500">
                   {news.category} · {news.date}
                 </p>
@@ -121,8 +123,8 @@ export default async function AdminDashboard() {
                 key={msg._id}
                 className="border-b border-zinc-100 pb-2 last:border-0"
               >
-                <p className="text-sm font-medium text-zinc-700">{msg.name}</p>
-                <p className="text-xs text-zinc-500">{msg.email}</p>
+                <p className="break-words text-sm font-medium text-zinc-700">{msg.name}</p>
+                <p className="break-words text-xs text-zinc-500">{msg.email}</p>
               </li>
             ))}
           </ul>

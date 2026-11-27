@@ -26,8 +26,8 @@ export default async function Footer() {
   return (
     <footer className="w-full border-t border-border bg-background bg-gray-100">
       {/* Main Footer Content */}
-      <div className="mx-auto max-w-11/12 px-4 py-12 sm:px-6  lg:px-8">
-        <div className="grid grid-cols-1 gap-10 sm:grid-cols-2 lg:grid-cols-4">
+      <div className="mx-auto max-w-11/12 px-4 py-8 sm:px-6 sm:py-12 lg:px-8">
+        <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 sm:gap-10 lg:grid-cols-4">
           {/* Brand + Description */}
           <div className="space-y-4">
             <Link href="/" className="inline-flex items-center gap-3">
@@ -36,10 +36,10 @@ export default async function Footer() {
                 alt={`${siteConfig.name} logo`}
                 width={56}
                 height={56}
-                className="h-14 w-14 rounded-full object-contain"
+                className="h-12 w-12 shrink-0 rounded-full object-contain sm:h-14 sm:w-14"
               />
               <div className="flex flex-col leading-tight">
-                <span className="text-lg font-semibold text-primary">
+                <span className="text-base font-semibold text-primary sm:text-lg">
                   {siteConfig.name}
                 </span>
                 <span className="text-[11px] font-medium tracking-widest text-muted-foreground">
@@ -104,18 +104,18 @@ export default async function Footer() {
 
               <a
                 href="tel:+8801712490705"
-                className="flex items-center gap-2 transition-colors hover:text-primary"
+                className="flex min-w-0 items-center gap-2 transition-colors hover:text-primary"
               >
                 <Phone className="h-4 w-4 shrink-0" />
-                +8801712490705
+                <span className="break-words">+8801712490705</span>
               </a>
 
               <a
                 href="mailto:nutrisunah@gmail.com"
-                className="flex items-center gap-2 transition-colors hover:text-primary"
+                className="flex min-w-0 items-center gap-2 transition-colors hover:text-primary"
               >
                 <Mail className="h-4 w-4 shrink-0" />
-                nutrisunah@gmail.com
+                <span className="break-all">nutrisunah@gmail.com</span>
               </a>
 
               {/* Social Icons */}
@@ -146,12 +146,12 @@ export default async function Footer() {
 
       {/* Bottom Bar */}
       <div className="border-t border-border bg-green-800">
-        <div className="mx-auto flex max-w-11/12 flex-col items-center justify-between gap-2 px-4 py-4 text-center text-xs text-white sm:flex-row sm:px-6 lg:px-8">
-          <p>
+        <div className="mx-auto flex max-w-11/12 flex-col items-center justify-between gap-1.5 px-4 py-3.5 text-center text-xs text-white sm:flex-row sm:gap-2 sm:px-6 sm:py-4 lg:px-8">
+          <p className="break-words">
             © {year}{" "}
             {siteConfig.name} | All Rights Reserved
           </p>
-          <p>
+          <p className="break-words">
             Developed By{" "}
             <span className="font-medium ">Md . Shakib Khan Noyon</span>
           </p>
