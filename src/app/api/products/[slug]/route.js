@@ -15,6 +15,13 @@ function redirectToProduct(request, slug, error) {
   return redirectToPath(request, path);
 }
 
+function redirectWithSuccess(request, message) {
+  return redirectToPath(
+    request,
+    `/admin/products?success=${encodeURIComponent(message)}`
+  );
+}
+
 export async function GET(request, { params }) {
   try {
     await dbConnect();
@@ -96,7 +103,7 @@ export async function POST(request, { params }) {
         return redirectToProduct(request, slug, 'Product not found.');
       }
 
-      return redirectToPath(request, '/admin/products');
+      return redirectWithSuccess(request, 'Product deleted successfully.');
     }
 
     const highlights = String(formData.get('highlights') || '')
@@ -138,7 +145,7 @@ export async function POST(request, { params }) {
       return redirectToProduct(request, slug, 'Product not found.');
     }
 
-    return redirectToPath(request, '/admin/products');
+    return redirectWithSuccess(request, 'Product updated successfully.');
   } catch (error) {
     console.error('Unable to process product form:', error);
     return redirectToProduct(request, slug, error.message || 'Unable to save product.');

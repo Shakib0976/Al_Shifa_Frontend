@@ -1,4 +1,5 @@
 import { cookies } from "next/headers";
+import { connection } from "next/server";
 import jwt from "jsonwebtoken";
 import AuthButtonClient from "./auth-button-client";
 
@@ -7,6 +8,7 @@ export default async function AuthButton() {
   let isAuthenticated = false;
 
   if (token) {
+    await connection();
     try {
       jwt.verify(token, process.env.JWT_SECRET);
       isAuthenticated = true;

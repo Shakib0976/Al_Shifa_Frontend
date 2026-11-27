@@ -24,37 +24,60 @@ async function getProducts() {
 
 export default async function ShopPage({ searchParams }) {
   const products = await getProducts();
-  const { category } = await searchParams;
+  const { category, q } = await searchParams;
   const categoryFilter = typeof category === "string" ? category : null;
-  
-  const visibleProducts = categoryFilter
-    ? products.filter((product) => product.categorySlug === categoryFilter)
-    : products;
+  const searchQuery = typeof q === "string" ? q.trim() : "";
+  const normalizedQuery = searchQuery.toLowerCase();
+  const visibleProducts = products.filter((product) => {
+    const matchesCategory =
+      !categoryFilter || product.categorySlug === categoryFilter;
+    const matchesName =
+      !normalizedQuery ||
+      (typeof product.name === "string" &&
+        product.name.toLowerCase().includes(normalizedQuery));
+
+    return matchesCategory && matchesName;
+  });
 
   return (
-    <section className="mx-auto max-w-7xl px-6 py-14 md:px-10">
+    <section className="mx-auto max-w-11/12 px-6 py-14 md:px-10">
       <div className="mb-10">
-        <p className="text-sm font-semibold uppercase tracking-wider text-emerald-700">
-          Al-Shifa store
-        </p>
-        <h1 className="mt-2 text-4xl font-bold tracking-tight">Shop</h1>
+        <h1 className="mt-2 text-4xl font-bold tracking-tight">  Al-Shifa store</h1>
         <p className="mt-3 max-w-2xl leading-7 text-zinc-600">
           Explore nutrition and care essentials selected for healthy animals.
         </p>
       </div>
-      {categoryFilter ? (
+      {searchQuery ? (
+        <p className="mb-6 text-sm text-zinc-600">
+          Search results for{" "}
+          <span className="font-semibold text-zinc-900">
+            &ldquo;{searchQuery}&rdquo;
+          </span>
+        </p>
+      ) : null}
+      {categoryFilter || searchQuery ? (
         <Link
           className="mb-6 inline-flex font-semibold text-emerald-800 hover:text-emerald-600"
           href="/shop"
         >
-          Clear category filter
+          Clear filters
         </Link>
       ) : null}
       {visibleProducts.length ? (
-        <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+        <div className="grid grid-cols-2 gap-5 md:grid-cols-3 lg:grid-cols-4">
           {visibleProducts.map((product) => (
             <ProductCard key={product.slug} product={product} />
           ))}
+        </div>
+      ) : searchQuery ? (
+        <div className="rounded-2xl border border-zinc-200 bg-white p-8 text-center">
+          <h2 className="text-lg font-semibold text-zinc-900">
+            No products found
+          </h2>
+          <p className="mt-2 text-sm text-zinc-600">
+            No product names match &ldquo;{searchQuery}&rdquo;. Try another
+            search.
+          </p>
         </div>
       ) : (
         <p className="rounded-2xl border border-zinc-200 p-8 text-zinc-600">

@@ -5,7 +5,7 @@ import Link from "next/link";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { ArrowRight } from "lucide-react";
-import { cn } from "@/lib/utils";
+import { ProductCard } from "@/components/products/product-card";
 
 if (typeof window !== "undefined") {
   gsap.registerPlugin(ScrollTrigger);
@@ -14,10 +14,10 @@ if (typeof window !== "undefined") {
 export default function ProductSection({ products }) {
   const sectionRef = useRef(null);
   const headerRef = useRef(null);
-  const gridRef = useRef(null);
   const ctaRef = useRef(null);
 
-  const visibleProducts = products.slice(0, 6);
+  const visibleProducts = products.slice(0, 8);
+  const showAllProducts = products.length >= 8;
 
   useEffect(() => {
     const reduce = window.matchMedia(
@@ -35,22 +35,6 @@ export default function ProductSection({ products }) {
         stagger: 0.12,
         scrollTrigger: {
           trigger: headerRef.current,
-          start: "top 85%",
-          toggleActions: "play none none none",
-        },
-      });
-
-      // Cards staggered reveal
-      const cards = gridRef.current.querySelectorAll("[data-card]");
-      gsap.from(cards, {
-        opacity: 0,
-        y: 40,
-        scale: 0.96,
-        duration: 0.7,
-        ease: "power3.out",
-        stagger: 0.1,
-        scrollTrigger: {
-          trigger: gridRef.current,
           start: "top 85%",
           toggleActions: "play none none none",
         },
@@ -79,9 +63,9 @@ export default function ProductSection({ products }) {
     <section
       ref={sectionRef}
       aria-labelledby="products-heading"
-      className="relative w-full overflow-hidden bg-background px-2 py-8 sm:px-3 sm:py-10 md:px-4 md:py-14 lg:py-16"
+      className="relative w-full overflow-hidden bg-background  px-2 py-8 sm:px-3 sm:py-10 md:px-4 md:py-14 lg:py-16"
     >
-      <div className="relative mx-auto w-full max-w-full sm:max-w-[95%] md:max-w-11/12">
+      <div className="relative mx-auto w-full max-w-full  sm:max-w-[95%] md:max-w-11/12">
         {/* Section header */}
         <div
           ref={headerRef}
@@ -107,94 +91,40 @@ export default function ProductSection({ products }) {
 
         {/* Product grid */}
         <div
-          ref={gridRef}
           className="grid grid-cols-2 gap-2.5 sm:gap-3 md:grid-cols-3 md:gap-4 lg:grid-cols-4 lg:gap-5"
         >
           {visibleProducts.map((product) => (
-            <article
-              key={product._id || product.slug}
-              data-card
-              className={cn(
-                "group relative flex flex-col overflow-hidden rounded-sm border border-border",
-                "bg-card shadow-sm transition-shadow duration-300 hover:shadow-md",
-              )}
-            >
-              <div className="relative flex aspect-square w-full items-center justify-center overflow-hidden bg-primary/10 sm:aspect-[4/3]">
-                {product.image?.src ? (
-                  <img
-                    src={product.image.src}
-                    alt={product.image.alt || product.name}
-                    className="h-full w-full object-contain p-3"
-                  />
-                ) : (
-                  <span aria-hidden="true" className="text-6xl text-primary">
-                    {product.icon || "🐾"}
-                  </span>
-                )}
-
-                {product.category && (
-                  <span className="absolute left-2 top-2 z-10 rounded-full bg-primary px-2 py-0.5 text-[9px] font-semibold tracking-wide text-primary-foreground sm:left-3 sm:top-3 sm:px-2.5 sm:py-1 sm:text-[10px]">
-                    {product.category}
-                  </span>
-                )}
-              </div>
-
-              {/* Card content */}
-              <div className="relative flex flex-1 flex-col p-3 sm:p-4 md:p-4 lg:p-5">
-                <h3 className="line-clamp-2 text-sm font-bold leading-snug tracking-tight text-foreground sm:text-base md:text-base lg:text-lg">
-                  {product.name}
-                </h3>
-
-                <p className="mt-1.5 line-clamp-2 text-[11px] leading-relaxed text-muted-foreground sm:mt-2 sm:text-xs md:text-sm">
-                  {product.description}
-                </p>
-
-                <div className="mt-auto pt-3 sm:pt-4">
-                  <Link
-                    href={`/products/${product.slug}`}
-                    className={cn(
-                      "inline-flex w-full items-center justify-center gap-1.5 rounded-sm",
-                      "border border-primary/30 bg-primary/10 px-3 py-2 text-[11px] font-semibold text-primary",
-                      "backdrop-blur-sm transition-colors",
-                      "hover:bg-primary hover:text-primary-foreground",
-                      "focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary",
-                      "sm:text-xs md:text-sm",
-                    )}
-                    aria-label={`Read more about ${product.name}`}
-                  >
-                    Read More
-                    <ArrowRight className="h-3 w-3 transition-transform group-hover:translate-x-0.5 sm:h-3.5 sm:w-3.5" />
-                  </Link>
-                </div>
-              </div>
-            </article>
+            <ProductCard key={product._id || product.slug} product={product} />
           ))}
         </div>
 
         {/* Show all products button — bottom-center (mobile/tablet) */}
-        <div
-          ref={ctaRef}
-          className="mt-6 flex justify-center sm:mt-8 md:mt-10 lg:hidden"
-        >
-          <Link
-            href="/products"
-            className="inline-flex items-center gap-1.5 rounded-sm border border-primary/30 bg-primary/10 px-5 py-2.5 text-sm font-semibold text-primary backdrop-blur-sm transition-colors hover:bg-primary hover:text-primary-foreground focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
-          >
-            Show All Products
-            <ArrowRight className="h-4 w-4" />
-          </Link>
-        </div>
+        {showAllProducts && (
+          <>
+            <div
+              ref={ctaRef}
+              className="mt-6 flex justify-center sm:mt-8 md:mt-10 lg:hidden"
+            >
+              <Link
+                href="/shop"
+                className="inline-flex items-center gap-1.5 rounded-sm border border-primary/30 bg-primary/10 px-5 py-2.5 text-sm font-semibold text-primary backdrop-blur-sm transition-colors hover:bg-primary hover:text-primary-foreground focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
+              >
+                Show All Products
+                <ArrowRight className="h-4 w-4" />
+              </Link>
+            </div>
 
-        {/* Show all products button — bottom-center (large screens) */}
-        <div className="mt-8 hidden justify-center lg:mt-10 lg:flex">
-          <Link
-            href="/products"
-            className="inline-flex items-center gap-1.5 rounded-lg border border-primary/30 bg-primary/10 px-6 py-3 text-sm font-semibold text-primary backdrop-blur-sm transition-colors hover:bg-primary hover:text-primary-foreground focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
-          >
-            Show All Products
-            <ArrowRight className="h-4 w-4" />
-          </Link>
-        </div>
+            <div className="mt-8 hidden justify-center lg:mt-10 lg:flex">
+              <Link
+                href="/shop"
+                className="inline-flex items-center gap-1.5 rounded-lg border border-primary/30 bg-primary/10 px-6 py-3 text-sm font-semibold text-primary backdrop-blur-sm transition-colors hover:bg-primary hover:text-primary-foreground focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
+              >
+                Show All Products
+                <ArrowRight className="h-4 w-4" />
+              </Link>
+            </div>
+          </>
+        )}
       </div>
     </section>
   );

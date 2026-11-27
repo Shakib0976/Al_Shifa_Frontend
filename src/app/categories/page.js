@@ -25,14 +25,14 @@ export default async function CategoriesPage() {
   const categories = await getCategories();
 
   return (
-    <section className="mx-auto max-w-7xl px-6 py-14 md:px-10">
+    <section className="mx-auto max-w-11/12 px-6 py-14 md:px-10">
       <p className="text-sm font-semibold uppercase tracking-wider text-emerald-700">
         Find what you need
       </p>
       <h1 className="mt-2 text-4xl font-bold tracking-tight">
         Product categories
       </h1>
-      <div className="mt-9 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+      <div className="mt-9 grid grid-cols-2 gap-5 md:grid-cols-3 lg:grid-cols-4">
         {categories.map((category) => (
           <Link
             className="group rounded-2xl border border-zinc-200 bg-white p-6 transition hover:border-emerald-300 hover:bg-emerald-50"

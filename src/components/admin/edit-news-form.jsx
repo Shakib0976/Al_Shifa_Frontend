@@ -1,18 +1,39 @@
 import Link from "next/link";
 
+const labelClassName = "block text-sm font-semibold text-zinc-700";
+const inputClassName =
+  "mt-2 w-full rounded-xl border border-zinc-300 bg-zinc-50/50 px-4 py-3 text-sm text-zinc-900 transition focus:border-emerald-600 focus:bg-white focus:outline-none focus:ring-4 focus:ring-emerald-100";
+const textareaClassName =
+  "mt-2 w-full resize-y rounded-xl border border-zinc-300 bg-zinc-50/50 px-4 py-3 text-sm leading-6 text-zinc-900 transition focus:border-emerald-600 focus:bg-white focus:outline-none focus:ring-4 focus:ring-emerald-100";
+const fileClassName =
+  "mt-2 block w-full rounded-xl border border-zinc-300 bg-zinc-50/50 px-4 py-3 text-sm text-zinc-600 file:mr-4 file:rounded-lg file:border-0 file:bg-emerald-100 file:px-4 file:py-2 file:text-sm file:font-semibold file:text-emerald-800 hover:file:bg-emerald-200";
+
 export default function EditNewsForm({ initialNews, error }) {
   return (
-    <div className="mx-auto max-w-2xl">
+    <div className="mx-auto max-w-3xl">
       <Link
         href="/admin/news"
-        className="text-sm text-emerald-700 hover:underline"
+        className="inline-flex items-center gap-2 text-sm font-medium text-emerald-700 transition hover:text-emerald-800"
       >
         ← Back to News
       </Link>
-      <h1 className="mt-3 text-2xl font-bold">Edit News</h1>
+      <div className="mb-6 mt-5">
+        <p className="text-xs font-semibold uppercase tracking-[0.18em] text-emerald-700">
+          News management
+        </p>
+        <h1 className="mt-2 text-3xl font-bold tracking-tight text-zinc-900">
+          Edit News Article
+        </h1>
+        <p className="mt-2 text-sm leading-6 text-zinc-500">
+          Update the article details and its published image.
+        </p>
+      </div>
 
       {error && (
-        <p className="mt-4 text-sm text-red-600" role="alert">
+        <p
+          className="mb-5 rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700"
+          role="alert"
+        >
           {error}
         </p>
       )}
@@ -21,10 +42,10 @@ export default function EditNewsForm({ initialNews, error }) {
         action={`/api/news/${encodeURIComponent(initialNews.slug)}`}
         method="post"
         encType="multipart/form-data"
-        className="mt-6 space-y-4"
+        className="space-y-5 rounded-2xl border border-zinc-200 bg-white p-5 shadow-sm sm:p-8"
       >
         <div>
-          <label htmlFor="title" className="block text-sm font-medium text-zinc-700">
+          <label htmlFor="title" className={labelClassName}>
             Title
           </label>
           <input
@@ -33,11 +54,11 @@ export default function EditNewsForm({ initialNews, error }) {
             name="title"
             defaultValue={initialNews.title}
             required
-            className="mt-1 w-full rounded-lg border border-zinc-300 px-3 py-2 focus:border-emerald-500 focus:outline-none"
+            className={inputClassName}
           />
         </div>
         <div>
-          <label htmlFor="slug" className="block text-sm font-medium text-zinc-700">
+          <label htmlFor="slug" className={labelClassName}>
             Slug
           </label>
           <input
@@ -46,12 +67,12 @@ export default function EditNewsForm({ initialNews, error }) {
             name="slug"
             defaultValue={initialNews.slug}
             required
-            className="mt-1 w-full rounded-lg border border-zinc-300 px-3 py-2 focus:border-emerald-500 focus:outline-none"
+            className={inputClassName}
           />
         </div>
         <div className="grid gap-4 sm:grid-cols-2">
           <div>
-            <label htmlFor="category" className="block text-sm font-medium text-zinc-700">
+            <label htmlFor="category" className={labelClassName}>
               Category
             </label>
             <input
@@ -60,11 +81,11 @@ export default function EditNewsForm({ initialNews, error }) {
               name="category"
               defaultValue={initialNews.category}
               required
-              className="mt-1 w-full rounded-lg border border-zinc-300 px-3 py-2 focus:border-emerald-500 focus:outline-none"
+              className={inputClassName}
             />
           </div>
           <div>
-            <label htmlFor="date" className="block text-sm font-medium text-zinc-700">
+            <label htmlFor="date" className={labelClassName}>
               Date
             </label>
             <input
@@ -73,12 +94,12 @@ export default function EditNewsForm({ initialNews, error }) {
               name="date"
               defaultValue={initialNews.date}
               required
-              className="mt-1 w-full rounded-lg border border-zinc-300 px-3 py-2 focus:border-emerald-500 focus:outline-none"
+              className={inputClassName}
             />
           </div>
         </div>
         <div>
-          <label htmlFor="author" className="block text-sm font-medium text-zinc-700">
+          <label htmlFor="author" className={labelClassName}>
             Author
           </label>
           <input
@@ -87,11 +108,11 @@ export default function EditNewsForm({ initialNews, error }) {
             name="author"
             defaultValue={initialNews.author}
             required
-            className="mt-1 w-full rounded-lg border border-zinc-300 px-3 py-2 focus:border-emerald-500 focus:outline-none"
+            className={inputClassName}
           />
         </div>
         <div>
-          <label htmlFor="excerpt" className="block text-sm font-medium text-zinc-700">
+          <label htmlFor="excerpt" className={labelClassName}>
             Excerpt
           </label>
           <textarea
@@ -100,11 +121,11 @@ export default function EditNewsForm({ initialNews, error }) {
             defaultValue={initialNews.excerpt}
             required
             rows={3}
-            className="mt-1 w-full rounded-lg border border-zinc-300 px-3 py-2 focus:border-emerald-500 focus:outline-none"
+            className={textareaClassName}
           />
         </div>
         <div>
-          <label htmlFor="image" className="block text-sm font-medium text-zinc-700">
+          <label htmlFor="image" className={labelClassName}>
             Replace news image
           </label>
           <input
@@ -112,14 +133,14 @@ export default function EditNewsForm({ initialNews, error }) {
             type="file"
             name="image"
             accept="image/avif,image/gif,image/jpeg,image/png,image/webp"
-            className="mt-1 block w-full rounded-lg border border-zinc-300 px-3 py-2 text-sm"
+            className={fileClassName}
           />
           <p className="mt-1 text-xs text-zinc-500">
             Leave empty to keep the current image, or enter a new image URL below.
           </p>
         </div>
         <div>
-          <label htmlFor="imageSrc" className="block text-sm font-medium text-zinc-700">
+          <label htmlFor="imageSrc" className={labelClassName}>
             Image URL
           </label>
           <input
@@ -127,11 +148,11 @@ export default function EditNewsForm({ initialNews, error }) {
             type="url"
             name="imageSrc"
             defaultValue={initialNews.image?.src || ""}
-            className="mt-1 w-full rounded-lg border border-zinc-300 px-3 py-2 focus:border-emerald-500 focus:outline-none"
+            className={inputClassName}
           />
         </div>
         <div>
-          <label htmlFor="imageAlt" className="block text-sm font-medium text-zinc-700">
+          <label htmlFor="imageAlt" className={labelClassName}>
             Image Alt Text
           </label>
           <input
@@ -139,15 +160,23 @@ export default function EditNewsForm({ initialNews, error }) {
             type="text"
             name="imageAlt"
             defaultValue={initialNews.image?.alt || ""}
-            className="mt-1 w-full rounded-lg border border-zinc-300 px-3 py-2 focus:border-emerald-500 focus:outline-none"
+            className={inputClassName}
           />
         </div>
-        <button
-          type="submit"
-          className="w-full rounded-lg bg-emerald-700 px-4 py-2 font-semibold text-white hover:bg-emerald-800"
-        >
-          Update News
-        </button>
+        <div className="flex flex-col-reverse gap-3 border-t border-zinc-100 pt-5 sm:flex-row sm:justify-end">
+          <Link
+            href="/admin/news"
+            className="inline-flex items-center justify-center rounded-xl border border-zinc-300 px-5 py-3 text-sm font-semibold text-zinc-700 transition hover:bg-zinc-50"
+          >
+            Cancel
+          </Link>
+          <button
+            type="submit"
+            className="inline-flex items-center justify-center rounded-xl bg-emerald-700 px-5 py-3 text-sm font-semibold text-white shadow-sm transition hover:bg-emerald-800 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emerald-700"
+          >
+            Update News
+          </button>
+        </div>
       </form>
     </div>
   );

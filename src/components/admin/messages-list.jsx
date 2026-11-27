@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { toast } from "react-toastify";
 
 export default function MessagesList({ initialMessages }) {
   const [messages, setMessages] = useState(initialMessages);
@@ -14,16 +15,17 @@ export default function MessagesList({ initialMessages }) {
       });
 
       if (!response.ok) {
-        alert("Failed to delete message");
+        toast.error("Failed to delete message.");
         return;
       }
 
       setMessages((currentMessages) =>
         currentMessages.filter((message) => message._id !== id)
       );
+      toast.success("Message deleted successfully.");
     } catch (error) {
       console.error("Unable to delete contact message:", error);
-      alert("Failed to delete message");
+      toast.error("Failed to delete message.");
     }
   };
 

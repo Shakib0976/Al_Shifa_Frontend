@@ -18,6 +18,13 @@ function redirectWithError(request, error) {
   );
 }
 
+function redirectWithSuccess(request, message) {
+  return redirectToPath(
+    request,
+    `/admin/products?success=${encodeURIComponent(message)}`
+  );
+}
+
 export async function GET() {
   try {
     await dbConnect();
@@ -127,7 +134,7 @@ export async function POST(request) {
     const newProduct = await Product.create(body);
 
     if (isFormSubmission) {
-      return redirectToPath(request, "/admin/products");
+      return redirectWithSuccess(request, "Product added successfully.");
     }
 
     return NextResponse.json(newProduct, { status: 201 });

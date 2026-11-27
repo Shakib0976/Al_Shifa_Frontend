@@ -109,7 +109,7 @@ export default function Navbar({ authButton }) {
       </div>
 
       <div className="border-b border-border bg-background/95 backdrop-blur-sm">
-        <div className="mx-auto flex h-16 max-w-7xl items-center justify-between gap-4 px-4 sm:px-6 lg:px-8">
+        <div className="mx-auto flex h-16 max-w-11/12 items-center justify-between gap-4 px-4 sm:px-6 lg:px-8">
           {/* Brand */}
           <Link
             href="/"

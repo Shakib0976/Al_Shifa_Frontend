@@ -37,7 +37,7 @@ export const categories = [
 
 export const navLinks = [
   { label: "Home", href: "/", icon: Home },
-  { label: "Shop", href: "/shop", icon: ShoppingBag },
+  { label: "All Products", href: "/shop", icon: ShoppingBag },
   // Categories handled separately as a dropdown
   { label: "Contact Us", href: "/contact", icon: Mail },
 ];

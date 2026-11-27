@@ -17,6 +17,13 @@ function redirectWithError(request, error) {
   );
 }
 
+function redirectWithSuccess(request, message) {
+  return redirectToPath(
+    request,
+    `/admin/news?success=${encodeURIComponent(message)}`
+  );
+}
+
 export async function GET() {
   try {
     await dbConnect();
@@ -85,7 +92,7 @@ export async function POST(request) {
     const newNews = await News.create(body);
 
     if (isFormSubmission) {
-      return redirectToPath(request, '/admin/news');
+      return redirectWithSuccess(request, 'News article added successfully.');
     }
 
     return NextResponse.json(newNews, { status: 201 });

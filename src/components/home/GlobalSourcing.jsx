@@ -338,7 +338,7 @@ export default function GlobalSourcing() {
             {/* CTA */}
             <div data-rise className="mt-8 flex flex-wrap gap-4">
               <Link
-                href="/products"
+                href="/shop"
                 className="group inline-flex min-h-12 items-center gap-3 rounded-xl bg-[#0B0B4A] px-7 py-3 text-sm font-semibold text-white shadow-lg shadow-[#0B0B4A]/25 transition-all duration-300 hover:-translate-y-0.5 hover:bg-[#14146B] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0B0B4A] focus-visible:ring-offset-2"
               >
                 Explore Products
